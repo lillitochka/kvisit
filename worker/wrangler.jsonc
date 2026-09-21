@@ -1,13 +1,6 @@
 {
   "$schema": "https://json.schemastore.org/wrangler.json",
   "name": "kvisite-orders",
-  "main": "index.js",
-  "compatibility_date": "2026-09-20",
-  "workers_dev": true,
-  "secrets": {
-    "required": ["BOT_TOKEN"]
-  },
-  "vars": {
-    "CHAT_ID": "1443391323"
-  }
+  "main": "./index.js",
+  "compatibility_date": "2026-09-20"
 }
