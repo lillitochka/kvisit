@@ -2,6 +2,5 @@
   "$schema": "https://json.schemastore.org/wrangler.json",
   "name": "kvisite-api",
   "main": "./index.js",
-  "compatibility_date": "2026-09-20",
-  "keep_vars": true
+  "compatibility_date": "2026-09-20"
 }
