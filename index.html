@@ -1,1 +1,838 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>kvisite — сайти-подарунки</title>
 
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #fff8fc;
+      color: #25202a;
+      line-height: 1.5;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    button,
+    input,
+    textarea,
+    select {
+      font: inherit;
+    }
+
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255, 248, 252, 0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid #f2dce9;
+    }
+
+    .nav {
+      max-width: 1100px;
+      margin: auto;
+      padding: 16px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 25px;
+      font-weight: 800;
+      color: #ed5a9a;
+      letter-spacing: -1px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 22px;
+      font-size: 14px;
+      color: #665c67;
+    }
+
+    .hero {
+      max-width: 1100px;
+      margin: auto;
+      padding: 90px 20px 70px;
+      text-align: center;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 7px 14px;
+      border-radius: 999px;
+      background: #ffe2f0;
+      color: #d94688;
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+
+    .hero h1 {
+      font-size: clamp(42px, 8vw, 78px);
+      line-height: 0.98;
+      letter-spacing: -3px;
+      margin-bottom: 22px;
+    }
+
+    .hero h1 span {
+      color: #ed5a9a;
+    }
+
+    .hero p {
+      max-width: 600px;
+      margin: auto;
+      color: #756b76;
+      font-size: 17px;
+    }
+
+    .hero-buttons {
+      margin-top: 32px;
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      border: none;
+      cursor: pointer;
+      padding: 14px 23px;
+      border-radius: 15px;
+      font-weight: 700;
+      transition: 0.2s;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .btn-main {
+      background: #ed5a9a;
+      color: white;
+      box-shadow: 0 10px 25px rgba(237, 90, 154, 0.25);
+    }
+
+    .btn-light {
+      background: white;
+      color: #d94688;
+      border: 1px solid #f0d5e4;
+    }
+
+    section {
+      max-width: 1100px;
+      margin: auto;
+      padding: 70px 20px;
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 38px;
+    }
+
+    .section-title h2 {
+      font-size: 35px;
+      letter-spacing: -1px;
+    }
+
+    .section-title p {
+      color: #817580;
+      margin-top: 8px;
+    }
+
+    .prices {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .price-card {
+      background: white;
+      border: 1px solid #f0dce7;
+      border-radius: 25px;
+      padding: 28px;
+      position: relative;
+      box-shadow: 0 12px 35px rgba(75, 30, 55, 0.05);
+    }
+
+    .price-card.featured {
+      border: 2px solid #ed5a9a;
+    }
+
+    .price-card h3 {
+      font-size: 22px;
+      margin-bottom: 8px;
+    }
+
+    .price {
+      font-size: 34px;
+      font-weight: 800;
+      color: #ed5a9a;
+      margin: 12px 0 15px;
+    }
+
+    .price-card p {
+      color: #766c77;
+      font-size: 14px;
+      min-height: 66px;
+    }
+
+    .price-card ul {
+      list-style: none;
+      margin-top: 20px;
+    }
+
+    .price-card li {
+      margin: 9px 0;
+      color: #554c56;
+      font-size: 14px;
+    }
+
+    .order-section {
+      max-width: 850px;
+    }
+
+    .order-box {
+      background: white;
+      border: 1px solid #f0dce7;
+      border-radius: 28px;
+      padding: 30px;
+      box-shadow: 0 15px 45px rgba(75, 30, 55, 0.06);
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      font-weight: 700;
+      margin-bottom: 8px;
+      font-size: 14px;
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%;
+      border: 1px solid #e8d7e1;
+      background: #fffafd;
+      border-radius: 13px;
+      padding: 13px 14px;
+      outline: none;
+      color: #29232b;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      border-color: #ed5a9a;
+    }
+
+    textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    .name-options {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .name-option {
+      border: 1px solid #e8d7e1;
+      border-radius: 13px;
+      padding: 12px;
+      text-align: center;
+      cursor: pointer;
+      background: #fffafd;
+    }
+
+    .name-option input {
+      display: none;
+    }
+
+    .name-option:has(input:checked) {
+      border-color: #ed5a9a;
+      background: #ffe9f3;
+      color: #d94688;
+      font-weight: 700;
+    }
+
+    .upload {
+      border: 2px dashed #efbfd7;
+      border-radius: 15px;
+      padding: 25px;
+      text-align: center;
+      color: #806f7a;
+      background: #fffafd;
+    }
+
+    .upload input {
+      border: none;
+      background: transparent;
+      padding: 10px 0 0;
+    }
+
+    .selected-files {
+      margin-top: 8px;
+      font-size: 13px;
+      color: #d94688;
+    }
+
+    .submit {
+      width: 100%;
+      margin-top: 8px;
+      font-size: 16px;
+    }
+
+    .success {
+      display: none;
+      text-align: center;
+      padding: 25px 10px;
+    }
+
+    .success h3 {
+      color: #d94688;
+      font-size: 25px;
+      margin-bottom: 10px;
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 15px;
+    }
+
+    .step {
+      background: white;
+      border: 1px solid #f0dce7;
+      border-radius: 20px;
+      padding: 22px;
+    }
+
+    .step-number {
+      color: #ed5a9a;
+      font-size: 25px;
+      font-weight: 800;
+    }
+
+    .step h3 {
+      margin: 8px 0;
+      font-size: 17px;
+    }
+
+    .step p {
+      color: #786e78;
+      font-size: 13px;
+    }
+
+    footer {
+      border-top: 1px solid #f0dce7;
+      text-align: center;
+      padding: 35px 20px;
+      color: #817580;
+      font-size: 13px;
+    }
+
+    footer strong {
+      color: #ed5a9a;
+    }
+
+    @media (max-width: 800px) {
+      .prices {
+        grid-template-columns: 1fr;
+      }
+
+      .steps {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .nav-links {
+        display: none;
+      }
+    }
+
+    @media (max-width: 500px) {
+      .hero {
+        padding-top: 65px;
+      }
+
+      .hero h1 {
+        font-size: 48px;
+      }
+
+      .steps {
+        grid-template-columns: 1fr;
+      }
+
+      .name-options {
+        grid-template-columns: 1fr;
+      }
+
+      .order-box {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header class="header">
+    <nav class="nav">
+      <a href="#" class="logo">kvisite</a>
+
+      <div class="nav-links">
+        <a href="#prices">Тарифи</a>
+        <a href="#how">Як це працює</a>
+        <a href="#order">Замовити</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+
+    <section class="hero">
+      <div class="badge">🎀 персональні сайти-подарунки</div>
+
+      <h1>
+        Подарунок,<br>
+        який <span>запам'ятається</span>
+      </h1>
+
+      <p>
+        Створюємо персональні сайти для днів народження,
+        сюрпризів, друзів та особливих моментів.
+      </p>
+
+      <div class="hero-buttons">
+        <a href="#order" class="btn btn-main">Замовити сайт</a>
+        <a href="#prices" class="btn btn-light">Переглянути тарифи</a>
+      </div>
+    </section>
+
+
+    <section id="prices">
+
+      <div class="section-title">
+        <h2>Тарифи</h2>
+        <p>Обери формат сайту, який тобі підходить</p>
+      </div>
+
+      <div class="prices">
+
+        <div class="price-card">
+          <h3>БАЗА</h3>
+          <div class="price">100 грн</div>
+
+          <p>
+            Простий та красивий сайт
+            для особливого привітання.
+          </p>
+
+          <ul>
+            <li>♡ привітання</li>
+            <li>♡ фотографії</li>
+            <li>♡ музика</li>
+            <li>♡ красиве оформлення</li>
+          </ul>
+        </div>
+
+
+        <div class="price-card">
+          <h3>З МУЛЬТФІЛЬМАМИ</h3>
+          <div class="price">120 грн</div>
+
+          <p>
+            Сайт із милими мультяшними
+            та анімаційними елементами.
+          </p>
+
+          <ul>
+            <li>♡ усе з тарифу БАЗА</li>
+            <li>♡ мультяшні елементи</li>
+            <li>♡ анімації</li>
+            <li>♡ більше оформлення</li>
+          </ul>
+        </div>
+
+
+        <div class="price-card featured">
+          <h3>ПОВНІСТЮ ВАШ САЙТ</h3>
+          <div class="price">200 грн</div>
+
+          <p>
+            Повністю індивідуальний сайт
+            за вашими побажаннями.
+          </p>
+
+          <ul>
+            <li>♡ індивідуальний дизайн</li>
+            <li>♡ ваші фото та текст</li>
+            <li>♡ анімації</li>
+            <li>♡ музика</li>
+            <li>♡ особливі елементи</li>
+          </ul>
+        </div>
+
+      </div>
+    </section>
+
+
+    <section id="how">
+
+      <div class="section-title">
+        <h2>Як це працює?</h2>
+        <p>Замовити сайт дуже просто</p>
+      </div>
+
+      <div class="steps">
+
+        <div class="step">
+          <div class="step-number">01</div>
+          <h3>Обираєш тариф</h3>
+          <p>
+            Обери один із трьох варіантів
+            сайту.
+          </p>
+        </div>
+
+        <div class="step">
+          <div class="step-number">02</div>
+          <h3>Заповнюєш форму</h3>
+          <p>
+            Розкажи, для кого сайт,
+            додай фото та свої побажання.
+          </p>
+        </div>
+
+        <div class="step">
+          <div class="step-number">03</div>
+          <h3>Підтверджуєш замовлення</h3>
+          <p>
+            Перевіряєш усі дані перед
+            оформленням.
+          </p>
+        </div>
+
+        <div class="step">
+          <div class="step-number">04</div>
+          <h3>Отримуєш сайт</h3>
+          <p>
+            Після оплати ми створюємо
+            твій персональний сайт.
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+
+    <section id="order" class="order-section">
+
+      <div class="section-title">
+        <h2>Замовити сайт</h2>
+        <p>Заповни форму, і ми зв'яжемося з тобою</p>
+      </div>
+
+      <div class="order-box">
+
+        <form id="orderForm">
+
+          <div class="form-group">
+            <label for="tariff">Обери тариф</label>
+
+            <select id="tariff" required>
+              <option value="">Обери варіант</option>
+              <option value="БАЗА — 100 грн">
+                БАЗА — 100 грн
+              </option>
+              <option value="З МУЛЬТФІЛЬМАМИ — 120 грн">
+                З МУЛЬТФІЛЬМАМИ — 120 грн
+              </option>
+              <option value="ПОВНІСТЮ ВАШ САЙТ — 200 грн">
+                ПОВНІСТЮ ВАШ САЙТ — 200 грн
+              </option>
+            </select>
+          </div>
+
+
+          <div class="form-group">
+            <label for="customerName">
+              Твоє ім'я
+            </label>
+
+            <input
+              id="customerName"
+              type="text"
+              placeholder="Наприклад, Катя"
+              required
+            >
+          </div>
+
+
+          <div class="form-group">
+            <label>
+              Як називати отримувача?
+            </label>
+
+            <div class="name-options">
+
+              <label class="name-option">
+                <input
+                  type="radio"
+                  name="recipientForm"
+                  value="Ім'я"
+                >
+                Ім'я
+              </label>
+
+              <label class="name-option">
+                <input
+                  type="radio"
+                  name="recipientForm"
+                  value="Лагідна форма"
+                >
+                Лагідна форма
+              </label>
+
+              <label class="name-option">
+                <input
+                  type="radio"
+                  name="recipientForm"
+                  value="Свій варіант"
+                >
+                Свій варіант
+              </label>
+
+            </div>
+          </div>
+
+
+          <div class="form-group">
+            <label for="recipientName">
+              Ім'я отримувача
+            </label>
+
+            <input
+              id="recipientName"
+              type="text"
+              placeholder="Наприклад, Уля"
+              required
+            >
+          </div>
+
+
+          <div class="form-group">
+            <label for="birthday">
+              Дата події
+            </label>
+
+            <input
+              id="birthday"
+              type="date"
+              required
+            >
+          </div>
+
+
+          <div class="form-group">
+            <label for="message">
+              Текст / привітання
+            </label>
+
+            <textarea
+              id="message"
+              placeholder="Напиши, що хочеш бачити на сайті..."
+              required
+            ></textarea>
+          </div>
+
+
+          <div class="form-group">
+            <label for="music">
+              Музика
+            </label>
+
+            <input
+              id="music"
+              type="text"
+              placeholder="Назва пісні або посилання"
+            >
+          </div>
+
+
+          <div class="form-group">
+            <label>
+              Фотографії
+            </label>
+
+            <div class="upload">
+
+              <div>
+                Додай фотографії для сайту
+              </div>
+
+              <input
+                id="photos"
+                type="file"
+                accept="image/*"
+                multiple
+              >
+
+              <div
+                id="selectedFiles"
+                class="selected-files"
+              ></div>
+
+            </div>
+          </div>
+
+
+          <div class="form-group">
+            <label for="contact">
+              Як із тобою зв'язатися?
+            </label>
+
+            <input
+              id="contact"
+              type="text"
+              placeholder="@username або номер телефону"
+              required
+            >
+          </div>
+
+
+          <button
+            type="submit"
+            class="btn btn-main submit"
+          >
+            Оформити замовлення
+          </button>
+
+        </form>
+
+
+        <div id="success" class="success">
+
+          <h3>Замовлення заповнено 💗</h3>
+
+          <p>
+            Перевір свої дані та переконайся,
+            що все вказано правильно.
+          </p>
+
+          <br>
+
+          <button
+            class="btn btn-main"
+            onclick="location.reload()"
+          >
+            Заповнити ще раз
+          </button>
+
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+
+  <footer>
+    <strong>kvisite</strong> — сайт, який хочеться запам'ятати
+  </footer>
+
+
+  <script>
+
+    const photos = document.getElementById("photos");
+    const selectedFiles = document.getElementById("selectedFiles");
+
+    photos.addEventListener("change", function () {
+
+      const files = Array.from(this.files);
+
+      if (files.length === 0) {
+        selectedFiles.textContent = "";
+        return;
+      }
+
+      selectedFiles.textContent =
+        `Обрано фотографій: ${files.length}`;
+
+    });
+
+
+    const form = document.getElementById("orderForm");
+    const success = document.getElementById("success");
+
+    form.addEventListener("submit", function (event) {
+
+      event.preventDefault();
+
+      const tariff =
+        document.getElementById("tariff").value;
+
+      const customerName =
+        document.getElementById("customerName").value;
+
+      const recipientName =
+        document.getElementById("recipientName").value;
+
+      const birthday =
+        document.getElementById("birthday").value;
+
+      const message =
+        document.getElementById("message").value;
+
+      const music =
+        document.getElementById("music").value;
+
+      const contact =
+        document.getElementById("contact").value;
+
+      console.log({
+        tariff,
+        customerName,
+        recipientName,
+        birthday,
+        message,
+        music,
+        contact,
+        photos: photos.files
+      });
+
+      form.style.display = "none";
+      success.style.display = "block";
+
+      window.scrollTo({
+        top: document.getElementById("order").offsetTop - 80,
+        behavior: "smooth"
+      });
+
+    });
+
+  </script>
+
+</body>
+</html>
