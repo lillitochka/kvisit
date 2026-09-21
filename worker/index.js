@@ -36,7 +36,8 @@ export default {
       const formData = await request.formData();
 
       const yourName = formData.get("yourName") || "Не указано";
-      const recipientName = formData.get("recipientName") || "Не указано";
+      const recipientName =
+        formData.get("recipientName") || "Не указано";
       const date = formData.get("date") || "Не указано";
       const greeting = formData.get("greeting") || "Не указано";
       const music = formData.get("music") || "Не указано";
@@ -72,13 +73,16 @@ export default {
       const photos = formData.getAll("photos");
 
       for (const photo of photos) {
-        if (!(photo instanceof File) || photo.size === 0) continue;
+        if (!(photo instanceof File) || photo.size === 0) {
+          continue;
+        }
 
         const photoData = new FormData();
+
         photoData.append("chat_id", env.CHAT_ID);
         photoData.append("photo", photo, photo.name);
 
-        const result = await fetch(
+        const telegramPhoto = await fetch(
           TELEGRAM_API(env.BOT_TOKEN, "sendPhoto"),
           {
             method: "POST",
@@ -86,7 +90,7 @@ export default {
           }
         );
 
-        if (!result.ok) {
+        if (!telegramPhoto.ok) {
           throw new Error("Telegram photo failed");
         }
       }
