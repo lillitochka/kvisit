@@ -231,6 +231,12 @@
       font-size: 16px;
     }
 
+    .submit:disabled {
+      opacity: 0.6;
+      cursor: wait;
+      transform: none;
+    }
+
     .success {
       display: none;
       text-align: center;
@@ -247,6 +253,17 @@
       color: #756b76;
       font-size: 15px;
       line-height: 1.7;
+    }
+
+    .error {
+      display: none;
+      margin-top: 15px;
+      padding: 13px;
+      border-radius: 13px;
+      background: #fff0f4;
+      color: #c43d70;
+      text-align: center;
+      font-size: 14px;
     }
 
     .steps {
@@ -348,7 +365,6 @@
     </nav>
   </header>
 
-
   <main>
 
     <section class="hero">
@@ -388,7 +404,6 @@
 
     </section>
 
-
     <section id="how">
 
       <div class="section-title">
@@ -403,101 +418,55 @@
 
       </div>
 
-
       <div class="steps">
 
         <div class="step">
-
-          <div class="step-number">
-            01
-          </div>
-
-          <h3>
-            Обираєш сайт
-          </h3>
-
+          <div class="step-number">01</div>
+          <h3>Обираєш сайт</h3>
           <p>
             Обери формат сайту,
             який тобі підходить.
           </p>
-
         </div>
 
-
         <div class="step">
-
-          <div class="step-number">
-            02
-          </div>
-
-          <h3>
-            Заповнюєш форму
-          </h3>
-
+          <div class="step-number">02</div>
+          <h3>Заповнюєш форму</h3>
           <p>
             Розкажи, для кого сайт,
             додай фото та побажання.
           </p>
-
         </div>
 
-
         <div class="step">
-
-          <div class="step-number">
-            03
-          </div>
-
-          <h3>
-            Підтверджуєш замовлення
-          </h3>
-
+          <div class="step-number">03</div>
+          <h3>Підтверджуєш замовлення</h3>
           <p>
             Перевіряєш усі дані
             перед оформленням.
           </p>
-
         </div>
 
-
         <div class="step">
-
-          <div class="step-number">
-            04
-          </div>
-
-          <h3>
-            Отримуєш сайт
-          </h3>
-
+          <div class="step-number">04</div>
+          <h3>Отримуєш сайт</h3>
           <p>
             Після оплати ми створюємо
             твій персональний сайт.
           </p>
-
         </div>
 
-
         <div class="step">
-
-          <div class="step-number">
-            05
-          </div>
-
-          <h3>
-            Даруєш сайт
-          </h3>
-
+          <div class="step-number">05</div>
+          <h3>Даруєш сайт</h3>
           <p>
             Даруй сайт та отримуй
             незабутні емоції разом
             з kvisite.
           </p>
-
         </div>
 
       </div>
-
 
       <div class="tariffs-button">
 
@@ -512,7 +481,6 @@
       </div>
 
     </section>
-
 
     <section
       id="order"
@@ -531,11 +499,9 @@
 
       </div>
 
-
       <div class="order-box">
 
         <form id="orderForm">
-
 
           <div class="form-group">
 
@@ -552,7 +518,6 @@
 
           </div>
 
-
           <div class="form-group">
 
             <label for="recipientName">
@@ -568,7 +533,6 @@
 
           </div>
 
-
           <div class="form-group">
 
             <label for="birthday">
@@ -582,7 +546,6 @@
             >
 
           </div>
-
 
           <div class="form-group">
 
@@ -598,7 +561,6 @@
 
           </div>
 
-
           <div class="form-group">
 
             <label for="music">
@@ -612,7 +574,6 @@
             >
 
           </div>
-
 
           <div class="form-group">
 
@@ -642,7 +603,6 @@
 
           </div>
 
-
           <div class="form-group">
 
             <label for="contact">
@@ -658,16 +618,22 @@
 
           </div>
 
-
           <button
             type="submit"
             class="btn btn-main submit"
+            id="submitButton"
           >
             Оформити замовлення
           </button>
 
-        </form>
+          <div
+            id="error"
+            class="error"
+          >
+            Не вдалося відправити замовлення. Спробуй ще раз.
+          </div>
 
+        </form>
 
         <div
           id="success"
@@ -692,7 +658,6 @@
 
   </main>
 
-
   <footer>
 
     <strong>
@@ -703,15 +668,16 @@
 
   </footer>
 
-
   <script>
+
+    const WORKER_URL =
+      "https://kvisite-orders.k2503212.workers.dev/";
 
     const photos =
       document.getElementById("photos");
 
     const selectedFiles =
       document.getElementById("selectedFiles");
-
 
     photos.addEventListener(
       "change",
@@ -740,24 +706,120 @@
     const success =
       document.getElementById("success");
 
+    const error =
+      document.getElementById("error");
+
+    const submitButton =
+      document.getElementById("submitButton");
+
 
     form.addEventListener(
       "submit",
-      function (event) {
+      async function (event) {
 
         event.preventDefault();
 
-        form.style.display = "none";
+        error.style.display = "none";
 
-        success.style.display = "block";
+        submitButton.disabled = true;
+        submitButton.textContent = "Відправляємо...";
 
-        window.scrollTo({
-          top:
-            document.getElementById("order")
-            .offsetTop - 80,
 
-          behavior: "smooth"
-        });
+        const formData =
+          new FormData();
+
+        formData.append(
+          "yourName",
+          document.getElementById("customerName").value
+        );
+
+        formData.append(
+          "recipientName",
+          document.getElementById("recipientName").value
+        );
+
+        formData.append(
+          "date",
+          document.getElementById("birthday").value
+        );
+
+        formData.append(
+          "greeting",
+          document.getElementById("message").value
+        );
+
+        formData.append(
+          "music",
+          document.getElementById("music").value
+        );
+
+        formData.append(
+          "contact",
+          document.getElementById("contact").value
+        );
+
+
+        const files =
+          Array.from(photos.files);
+
+        files.forEach(
+          function (file) {
+
+            formData.append(
+              "photos",
+              file,
+              file.name
+            );
+
+          }
+        );
+
+
+        try {
+
+          const response =
+            await fetch(
+              WORKER_URL,
+              {
+                method: "POST",
+                body: formData
+              }
+            );
+
+
+          const result =
+            await response.json();
+
+
+          if (!response.ok || !result.ok) {
+            throw new Error("Order failed");
+          }
+
+
+          form.style.display = "none";
+
+          success.style.display = "block";
+
+          window.scrollTo({
+            top:
+              document.getElementById("order")
+              .offsetTop - 80,
+
+            behavior: "smooth"
+          });
+
+
+        } catch (err) {
+
+          console.error(err);
+
+          error.style.display = "block";
+
+          submitButton.disabled = false;
+          submitButton.textContent =
+            "Оформити замовлення";
+
+        }
 
       }
     );
