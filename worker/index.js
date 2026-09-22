@@ -42,7 +42,8 @@ export default {
       const greeting = formData.get("greeting") || "Не указано";
       const music = formData.get("music") || "Не указано";
       const contact = formData.get("contact") || "Не указано";
-
+const tariff = formData.get("tariff") || "Не указано";
+const wishes = formData.get("wishes") || "Не указано";
       const message =
         `🎀 НОВОЕ ЗАМОВЛЕННЯ kvisite\n\n` +
         `👤 Твоє ім'я: ${yourName}\n` +
