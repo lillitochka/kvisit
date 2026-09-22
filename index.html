@@ -517,7 +517,16 @@
             >
 
           </div>
+<div class="form-group">
+  <label>Оберіть тариф</label>
 
+  <select name="tariff" required>
+    <option value="" disabled selected>Оберіть тариф</option>
+    <option value="БАЗА — 100 грн">БАЗА — 100 грн</option>
+    <option value="З МУЛЬТФІЛЬМАМИ — 120 грн">З МУЛЬТФІЛЬМАМИ — 120 грн</option>
+    <option value="ПОВНІСТЮ ВАШ САЙТ — 200 грн">ПОВНІСТЮ ВАШ САЙТ — 200 грн</option>
+  </select>
+</div>
           <div class="form-group">
 
             <label for="recipientName">
@@ -615,7 +624,14 @@
               placeholder="@username або номер телефону"
               required
             >
-
+<div class="form-group">
+  <label>Напишіть усе, що ви хотіли б бачити на сайті</label>
+  <textarea
+    name="wishes"
+    rows="5"
+    placeholder="Стиль, кольори, додаткові елементи, побажання щодо оформлення та все інше, що ви хотіли б додати"
+  ></textarea>
+</div>
           </div>
 
           <button
