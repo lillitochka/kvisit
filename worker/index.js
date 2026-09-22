@@ -42,18 +42,20 @@ export default {
       const greeting = formData.get("greeting") || "Не указано";
       const music = formData.get("music") || "Не указано";
       const contact = formData.get("contact") || "Не указано";
-const tariff = formData.get("tariff") || "Не указано";
-const wishes = formData.get("wishes") || "Не указано";
+      const tariff = formData.get("tariff") || "Не указано";
+      const wishes = formData.get("wishes") || "Не указано";
+
       const message =
-        `🎀 НОВОЕ ЗАМОВЛЕННЯ kvisite\n\n` +
+        `🎀 НОВЕ ЗАМОВЛЕННЯ kvisite\n\n` +
         `👤 Твоє ім'я: ${yourName}\n` +
         `💗 Ім'я отримувача: ${recipientName}\n` +
         `📅 Дата: ${date}\n\n` +
         `💌 Текст / привітання:\n${greeting}\n\n` +
         `🎵 Музика: ${music}\n` +
-        `📱 Контакт: ${contact}`;
-`💰 Тариф: ${tariff}\n\n` +
-`✨ Побажання щодо сайту:\n${wishes}`;
+        `📱 Контакт: ${contact}\n\n` +
+        `💰 Тариф: ${tariff}\n\n` +
+        `✨ Побажання щодо сайту:\n${wishes}`;
+
       const telegramMessage = await fetch(
         TELEGRAM_API(env.BOT_TOKEN, "sendMessage"),
         {
