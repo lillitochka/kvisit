@@ -70,8 +70,24 @@ export default {
         }
       );
 
-      if (!telegramMessage.ok) {
-        throw new Error("Telegram message failed");
+      const telegramMessageResult =
+        await telegramMessage.json();
+
+      if (!telegramMessage.ok || !telegramMessageResult.ok) {
+        return new Response(
+          JSON.stringify({
+            ok: false,
+            step: "sendMessage",
+            telegram: telegramMessageResult,
+          }),
+          {
+            status: 500,
+            headers: {
+              "Content-Type": "application/json",
+              ...corsHeaders,
+            },
+          }
+        );
       }
 
       const photos = formData.getAll("photos");
@@ -94,8 +110,24 @@ export default {
           }
         );
 
-        if (!telegramPhoto.ok) {
-          throw new Error("Telegram photo failed");
+        const telegramPhotoResult =
+          await telegramPhoto.json();
+
+        if (!telegramPhoto.ok || !telegramPhotoResult.ok) {
+          return new Response(
+            JSON.stringify({
+              ok: false,
+              step: "sendPhoto",
+              telegram: telegramPhotoResult,
+            }),
+            {
+              status: 500,
+              headers: {
+                "Content-Type": "application/json",
+                ...corsHeaders,
+              },
+            }
+          );
         }
       }
 
@@ -112,11 +144,13 @@ export default {
           },
         }
       );
+
     } catch (error) {
       return new Response(
         JSON.stringify({
           ok: false,
-          error: "Не вдалося відправити замовлення",
+          step: "worker",
+          error: String(error),
         }),
         {
           status: 500,
