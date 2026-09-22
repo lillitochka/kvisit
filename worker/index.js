@@ -52,7 +52,8 @@ const wishes = formData.get("wishes") || "Не указано";
         `💌 Текст / привітання:\n${greeting}\n\n` +
         `🎵 Музика: ${music}\n` +
         `📱 Контакт: ${contact}`;
-
+`💰 Тариф: ${tariff}\n\n` +
+`✨ Побажання щодо сайту:\n${wishes}`;
       const telegramMessage = await fetch(
         TELEGRAM_API(env.BOT_TOKEN, "sendMessage"),
         {
