@@ -3,853 +3,585 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <title>kvisite — сайти-подарунки</title>
-
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: #fff8fc;
-      color: #25202a;
-      line-height: 1.5;
-    }
-
-    a {
-      text-decoration: none;
-      color: inherit;
-    }
-
-    button,
-    input,
-    textarea,
-    select {
-      font: inherit;
-    }
-
-    .header {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      background: rgba(255, 248, 252, 0.94);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid #f2dce9;
-    }
-
-    .nav {
-      max-width: 1100px;
-      margin: auto;
-      padding: 16px 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .logo {
-      font-size: 25px;
-      font-weight: 800;
-      color: #ed5a9a;
-      letter-spacing: -1px;
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 22px;
-      font-size: 14px;
-      color: #665c67;
-    }
-
-    .hero {
-      max-width: 1100px;
-      margin: auto;
-      padding: 90px 20px 70px;
-      text-align: center;
-    }
-
-    .badge {
-      display: inline-block;
-      padding: 7px 14px;
-      border-radius: 999px;
-      background: #ffe2f0;
-      color: #d94688;
-      font-size: 13px;
-      font-weight: 700;
-      margin-bottom: 20px;
-    }
-
-    .hero h1 {
-      font-size: clamp(42px, 8vw, 78px);
-      line-height: 0.98;
-      letter-spacing: -3px;
-      margin-bottom: 22px;
-    }
-
-    .hero h1 span {
-      color: #ed5a9a;
-    }
-
-    .hero p {
-      max-width: 600px;
-      margin: auto;
-      color: #756b76;
-      font-size: 17px;
-    }
-
-    .hero-buttons {
-      margin-top: 32px;
-      display: flex;
-      justify-content: center;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    .btn {
-      border: none;
-      cursor: pointer;
-      padding: 14px 23px;
-      border-radius: 15px;
-      font-weight: 700;
-      transition: 0.2s;
-    }
-
-    .btn:hover {
-      transform: translateY(-2px);
-    }
-
-    .btn-main {
-      background: #ed5a9a;
-      color: white;
-      box-shadow: 0 10px 25px rgba(237, 90, 154, 0.25);
-    }
-
-    .btn-light {
-      background: white;
-      color: #d94688;
-      border: 1px solid #f0d5e4;
-    }
-
-    section {
-      max-width: 1100px;
-      margin: auto;
-      padding: 70px 20px;
-    }
-
-    .section-title {
-      text-align: center;
-      margin-bottom: 38px;
-    }
-
-    .section-title h2 {
-      font-size: 35px;
-      letter-spacing: -1px;
-    }
-
-    .section-title p {
-      color: #817580;
-      margin-top: 8px;
-    }
-
-    .order-section {
-      max-width: 850px;
-    }
-
-    .order-box {
-      background: white;
-      border: 1px solid #f0dce7;
-      border-radius: 28px;
-      padding: 30px;
-      box-shadow: 0 15px 45px rgba(75, 30, 55, 0.06);
-    }
-
-    .form-group {
-      margin-bottom: 20px;
-    }
-
-    .form-group label {
-      display: block;
-      font-weight: 700;
-      margin-bottom: 8px;
-      font-size: 14px;
-    }
-
-    .form-group input,
-    .form-group textarea,
-    .form-group select {
-      width: 100%;
-      border: 1px solid #e8d7e1;
-      background: #fffafd;
-      border-radius: 13px;
-      padding: 13px 14px;
-      outline: none;
-      color: #29232b;
-    }
-
-    .form-group input:focus,
-    .form-group textarea:focus,
-    .form-group select:focus {
-      border-color: #ed5a9a;
-    }
-
-    textarea {
-      min-height: 120px;
-      resize: vertical;
-    }
-
-    .upload {
-      border: 2px dashed #efbfd7;
-      border-radius: 15px;
-      padding: 25px;
-      text-align: center;
-      color: #806f7a;
-      background: #fffafd;
-    }
-
-    .upload input {
-      border: none;
-      background: transparent;
-      padding: 10px 0 0;
-    }
-
-    .selected-files {
-      margin-top: 8px;
-      font-size: 13px;
-      color: #d94688;
-    }
-
-    .submit {
-      width: 100%;
-      margin-top: 8px;
-      font-size: 16px;
-    }
-
-    .submit:disabled {
-      opacity: 0.6;
-      cursor: wait;
-      transform: none;
-    }
-
-    .success {
-      display: none;
-      text-align: center;
-      padding: 25px 10px;
-    }
-
-    .success h3 {
-      color: #d94688;
-      font-size: 25px;
-      margin-bottom: 14px;
-    }
-
-    .success p {
-      color: #756b76;
-      font-size: 15px;
-      line-height: 1.7;
-    }
-
-    .error {
-      display: none;
-      margin-top: 15px;
-      padding: 13px;
-      border-radius: 13px;
-      background: #fff0f4;
-      color: #c43d70;
-      text-align: center;
-      font-size: 14px;
-    }
-
-    .steps {
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 15px;
-    }
-
-    .step {
-      background: white;
-      border: 1px solid #f0dce7;
-      border-radius: 20px;
-      padding: 22px;
-    }
-
-    .step-number {
-      color: #ed5a9a;
-      font-size: 25px;
-      font-weight: 800;
-    }
-
-    .step h3 {
-      margin: 8px 0;
-      font-size: 17px;
-    }
-
-    .step p {
-      color: #786e78;
-      font-size: 13px;
-    }
-
-    .tariffs-button {
-      text-align: center;
-      margin-top: 10px;
-    }
-
-    footer {
-      border-top: 1px solid #f0dce7;
-      text-align: center;
-      padding: 35px 20px;
-      color: #817580;
-      font-size: 13px;
-    }
-
-    footer strong {
-      color: #ed5a9a;
-    }
-
-    @media (max-width: 900px) {
-      .steps {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-
-    @media (max-width: 800px) {
-      .nav-links {
-        display: none;
-      }
-    }
-
-    @media (max-width: 500px) {
-      .hero {
-        padding-top: 65px;
-      }
-
-      .hero h1 {
-        font-size: 48px;
-      }
-
-      .steps {
-        grid-template-columns: 1fr;
-      }
-
-      .order-box {
-        padding: 20px;
-      }
-    }
-  </style>
+  <meta name="theme-color" content="#fff8f5">
+  <meta name="description" content="Створи особливий персональний сайт для людини, яку любиш. Kvisite — сайти з емоціями.">
+  <title>kvisite ♡ персональні сайти</title>
+  <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
+  <div class="top-note">
+    маленький сайт — велика емоція ♡
+  </div>
 
   <header class="header">
-    <nav class="nav">
+    <a class="logo" href="#home">kvisite<span>♡</span></a>
 
-      <a href="#" class="logo">kvisite</a>
-
-      <div class="nav-links">
-        <a href="#how">Як це працює</a>
-        <a href="#order">Замовити</a>
-        <a
-          href="https://t.me/kvisite"
-          target="_blank"
-        >
-          Тарифи
-        </a>
-      </div>
-
+    <nav class="navigation">
+      <a href="#about">Про нас</a>
+      <a href="#how">Як це працює</a>
+      <a href="#price">Вартість</a>
+      <a href="#order" class="nav-order">Замовити ↗</a>
     </nav>
   </header>
 
   <main>
+    <section class="hero section" id="home">
+      <div class="hero-copy">
+        <div class="eyebrow"><span class="sparkle">✳</span> ТВОЯ ІСТОРІЯ В ОДНОМУ САЙТІ</div>
 
-    <section class="hero">
+        <h1>
+          Подаруй не річ,<br>
+          а <span class="pink-text">емоції</span> ♡
+        </h1>
 
-      <div class="badge">
-        🎀 персональні сайти-подарунки
-      </div>
-
-      <h1>
-        Подарунок,<br>
-        який <span>запам'ятається</span>
-      </h1>
-
-      <p>
-        Створюємо персональні сайти для днів народження,
-        сюрпризів, друзів та особливих моментів.
-      </p>
-
-      <div class="hero-buttons">
-
-        <a
-          href="#order"
-          class="btn btn-main"
-        >
-          Замовити сайт
-        </a>
-
-        <a
-          href="https://t.me/kvisite"
-          target="_blank"
-          class="btn btn-light"
-        >
-          Тарифи
-        </a>
-
-      </div>
-
-    </section>
-
-    <section id="how">
-
-      <div class="section-title">
-
-        <h2>
-          Як це працює?
-        </h2>
-
-        <p>
-          Замовити сайт дуже просто
+        <p class="hero-description">
+          Персональний сайт для особливої людини.
+          Ваші фото, теплі слова та маленькі деталі,
+          які роблять подарунок незабутнім.
         </p>
 
+        <div class="hero-buttons">
+          <a href="#order" class="button button-dark">Створити сайт <span>↗</span></a>
+          <a href="#how" class="text-link">Як це працює?</a>
+        </div>
+
+        <div class="hero-bottom">
+          <span class="tiny-heart">♡</span>
+          <span>Створено з любов’ю до деталей</span>
+        </div>
+      </div>
+
+      <div class="collage" aria-label="Приклад оформлення персонального сайту">
+        <div class="collage-paper paper-back"></div>
+
+        <div class="photo-card photo-main">
+          <div class="fake-photo">
+            <span class="photo-sun">☼</span>
+            <span class="photo-heart">♡</span>
+            <span class="photo-caption">our little story</span>
+          </div>
+          <div class="photo-label">найцінніші моменти</div>
+        </div>
+
+        <div class="photo-card photo-small">
+          <div class="small-photo-art">୨୧</div>
+          <span>тільки для тебе</span>
+        </div>
+
+        <div class="sticker sticker-heart">♡</div>
+        <div class="sticker sticker-star">✳</div>
+        <div class="sticker sticker-love">made with love</div>
+        <div class="sticker sticker-bow">🎀</div>
+
+        <div class="note-card">
+          <span>маленьке нагадування</span>
+          <strong>ти — особлива людина ♡</strong>
+        </div>
+      </div>
+
+      <div class="hero-decor decor-one">✳</div>
+      <div class="hero-decor decor-two">♡</div>
+    </section>
+
+    <section class="ticker" aria-label="Особливості">
+      <span>ТВОЇ СПОГАДИ</span><b>♡</b>
+      <span>ТВОЇ СЛОВА</span><b>♡</b>
+      <span>ТВОЯ ІСТОРІЯ</span><b>♡</b>
+      <span>ТВОЇ СПОГАДИ</span><b>♡</b>
+    </section>
+
+    <section class="about section" id="about">
+      <div class="section-heading">
+        <span class="eyebrow">ЩО ТАКЕ KVISITE?</span>
+        <h2>Не просто сайт.<br><span class="pink-text">Твоя маленька історія.</span></h2>
+      </div>
+
+      <p class="about-text">
+        Це особистий подарунок, у якому можна зібрати фотографії,
+        привітання, улюблену музику та все, що хочеться сказати
+        близькій людині. Кожен сайт створюється з урахуванням
+        твоїх побажань.
+      </p>
+
+      <div class="feature-grid">
+        <article class="feature-card feature-pink">
+          <span class="feature-number">01</span>
+          <div class="feature-icon">♡</div>
+          <h3>Особистий</h3>
+          <p>Імена, спогади й слова, які мають значення саме для вас.</p>
+          <span class="feature-decoration">love note</span>
+        </article>
+
+        <article class="feature-card feature-cream">
+          <span class="feature-number">02</span>
+          <div class="feature-icon">✿</div>
+          <h3>Особливий</h3>
+          <p>Оформлення, кольори та деталі відповідно до твоїх ідей.</p>
+          <span class="feature-decoration">made for you</span>
+        </article>
+
+        <article class="feature-card feature-black">
+          <span class="feature-number">03</span>
+          <div class="feature-icon">✳</div>
+          <h3>Незабутній</h3>
+          <p>Посилання, яке можна надіслати людині та відкрити з телефона.</p>
+          <span class="feature-decoration">a little surprise</span>
+        </article>
+      </div>
+    </section>
+
+    <section class="how section" id="how">
+      <div class="section-heading centered">
+        <span class="eyebrow">УСЕ ПРОСТО</span>
+        <h2>Як це <span class="pink-text">працює?</span></h2>
+        <p>Від твоєї ідеї до готового подарунка ♡</p>
       </div>
 
       <div class="steps">
+        <article class="step">
+          <span class="step-number">01</span>
+          <div class="step-icon">✎</div>
+          <h3>Заповни форму</h3>
+          <p>Розкажи, для кого сайт і яким ти його уявляєш.</p>
+        </article>
 
-        <div class="step">
-          <div class="step-number">01</div>
-          <h3>Обираєш сайт</h3>
-          <p>
-            Обери формат сайту,
-            який тобі підходить.
-          </p>
-        </div>
+        <article class="step">
+          <span class="step-number">02</span>
+          <div class="step-icon">♡</div>
+          <h3>Уточни деталі</h3>
+          <p>Ми зв’яжемося з тобою для обговорення замовлення й оплати.</p>
+        </article>
 
-        <div class="step">
-          <div class="step-number">02</div>
-          <h3>Заповнюєш форму</h3>
-          <p>
-            Розкажи, для кого сайт,
-            додай фото та побажання.
-          </p>
-        </div>
+        <article class="step">
+          <span class="step-number">03</span>
+          <div class="step-icon">✿</div>
+          <h3>Дочекайся сайту</h3>
+          <p>Після узгодження деталей ми створимо твій сайт.</p>
+        </article>
 
-        <div class="step">
-          <div class="step-number">03</div>
-          <h3>Підтверджуєш замовлення</h3>
-          <p>
-            Перевіряєш усі дані
-            перед оформленням.
-          </p>
-        </div>
-
-        <div class="step">
-          <div class="step-number">04</div>
-          <h3>Отримуєш сайт</h3>
-          <p>
-            Після оплати ми створюємо
-            твій персональний сайт.
-          </p>
-        </div>
-
-        <div class="step">
-          <div class="step-number">05</div>
-          <h3>Даруєш сайт</h3>
-          <p>
-            Даруй сайт та отримуй
-            незабутні емоції разом
-            з kvisite.
-          </p>
-        </div>
-
+        <article class="step">
+          <span class="step-number">04</span>
+          <div class="step-icon">🎀</div>
+          <h3>Даруй емоції</h3>
+          <p>Отримай посилання та поділися подарунком з близькою людиною.</p>
+        </article>
       </div>
-
-      <div class="tariffs-button">
-
-        <a
-          href="https://t.me/kvisite"
-          target="_blank"
-          class="btn btn-main"
-        >
-          Переглянути тарифи
-        </a>
-
-      </div>
-
     </section>
 
-    <section
-      id="order"
-      class="order-section"
-    >
+    <section class="price-section section" id="price">
+      <div class="price-card">
+        <div class="price-copy">
+          <span class="eyebrow">ОДИН ТАРИФ · УСЕ ПРО ТВОЮ ІСТОРІЮ</span>
+          <h2>Твій сайт.<br><span>Твої правила.</span></h2>
+          <p>
+            Один тариф для персонального сайту з індивідуальним
+            оформленням, фотографіями та твоїми побажаннями.
+          </p>
 
-      <div class="section-title">
+          <ul class="price-list">
+            <li><span>♡</span> Персональне оформлення</li>
+            <li><span>♡</span> Фотографії та привітання</li>
+            <li><span>♡</span> Побажання щодо стилю й деталей</li>
+            <li><span>♡</span> Уточнення деталей перед створенням</li>
+          </ul>
 
-        <h2>
-          Замовити сайт
-        </h2>
+          <a href="#order" class="button button-dark">Замовити сайт <span>↗</span></a>
+        </div>
 
+        <div class="price-visual">
+          <div class="price-sticker">one & only ♡</div>
+          <div class="price-inner">
+            <span class="price-label">ПЕРСОНАЛЬНИЙ САЙТ</span>
+            <div class="price-amount">150<span>₴</span></div>
+            <span class="price-caption">подарунок, який запам’ятається</span>
+            <div class="price-flower">✿</div>
+          </div>
+          <span class="price-side-note">made just for you</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="order-section section" id="order">
+      <div class="order-intro">
+        <span class="eyebrow">ТВОРИМО ЩОСЬ ОСОБЛИВЕ</span>
+        <h2>Розкажи мені<br><span class="pink-text">про свою ідею ♡</span></h2>
         <p>
-          Заповни форму, і ми зв'яжемося з тобою
+          Заповни форму нижче. Що більше деталей ти розкажеш,
+          то легше буде зрозуміти, яким ти хочеш бачити свій сайт.
         </p>
 
-      </div>
-
-      <div class="order-box">
-
-        <form id="orderForm">
-
-          <div class="form-group">
-
-            <label for="customerName">
-              Твоє ім'я
-            </label>
-
-            <input
-              id="customerName"
-              type="text"
-              placeholder="Введи своє ім'я"
-              required
-            >
-
+        <div class="order-note">
+          <span class="note-icon">♡</span>
+          <div>
+            <strong>Твоя ідея має значення</strong>
+            <p>Не знаєш, що обрати? Просто опиши свою ідею своїми словами.</p>
           </div>
-<div class="form-group">
-  <label>Оберіть тариф</label>
-
-  <select name="tariff" required>
-    <option value="" disabled selected>Оберіть тариф</option>
-    <option value="БАЗА — 100 грн">БАЗА — 100 грн</option>
-    <option value="З МУЛЬТФІЛЬМАМИ — 120 грн">З МУЛЬТФІЛЬМАМИ — 120 грн</option>
-    <option value="ПОВНІСТЮ ВАШ САЙТ — 200 грн">ПОВНІСТЮ ВАШ САЙТ — 200 грн</option>
-  </select>
-</div>
-          <div class="form-group">
-
-            <label for="recipientName">
-              Ім'я отримувача
-            </label>
-
-            <input
-              id="recipientName"
-              type="text"
-              placeholder="Напишіть кілька форм імені"
-              required
-            >
-
-          </div>
-
-          <div class="form-group">
-
-            <label for="birthday">
-              Дата події
-            </label>
-
-            <input
-              id="birthday"
-              type="date"
-              required
-            >
-
-          </div>
-
-          <div class="form-group">
-
-            <label for="message">
-              Текст / привітання
-            </label>
-
-            <textarea
-              id="message"
-              placeholder="Напиши, що хочеш бачити на сайті..."
-              required
-            ></textarea>
-
-          </div>
-
-          <div class="form-group">
-
-            <label for="music">
-              Музика
-            </label>
-
-            <input
-              id="music"
-              type="text"
-              placeholder="Назва пісні або посилання"
-            >
-
-          </div>
-
-          <div class="form-group">
-
-            <label>
-              Фотографії
-            </label>
-
-            <div class="upload">
-
-              <div>
-                Додай фотографії для сайту
-              </div>
-
-              <input
-                id="photos"
-                type="file"
-                accept="image/*"
-                multiple
-              >
-
-              <div
-                id="selectedFiles"
-                class="selected-files"
-              ></div>
-
-            </div>
-
-          </div>
-
-          <div class="form-group">
-
-            <label for="contact">
-              Як із тобою зв'язатися?
-            </label>
-
-            <input
-              id="contact"
-              type="text"
-              placeholder="@username або номер телефону"
-              required
-            >
-<div class="form-group">
-  <label>Напишіть усе, що ви хотіли б бачити на сайті</label>
-  <textarea
-    name="wishes"
-    rows="5"
-    placeholder="Стиль, кольори, додаткові елементи, побажання щодо оформлення та все інше, що ви хотіли б додати"
-  ></textarea>
-</div>
-          </div>
-
-          <button
-            type="submit"
-            class="btn btn-main submit"
-            id="submitButton"
-          >
-            Оформити замовлення
-          </button>
-
-          <div
-            id="error"
-            class="error"
-          >
-            Не вдалося відправити замовлення. Спробуй ще раз.
-          </div>
-
-        </form>
-
-        <div
-          id="success"
-          class="success"
-        >
-
-          <h3>
-            Замовлення прийнято 💗
-          </h3>
-
-          <p>
-            Очікуйте, поки вам напише менеджер
-            для оплати, уточнення деталей та
-            подальшої видачі вашого сайту.
-          </p>
-
         </div>
 
+        <div class="mini-sticker">з любов’ю, kvisite 🎀</div>
       </div>
 
+      <div class="form-card">
+        <div class="form-top">
+          <div>
+            <span class="form-kicker">ФОРМА ЗАМОВЛЕННЯ</span>
+            <h3>Створімо твій сайт</h3>
+          </div>
+          <div class="form-price">150 ₴</div>
+        </div>
+
+        <div class="progress-wrap">
+          <div class="progress-line"><span id="formProgress"></span></div>
+          <span id="progressText">Заповни обов’язкові поля</span>
+        </div>
+
+        <form id="orderForm">
+          <input type="hidden" name="tariff" value="Персональний сайт — 150 грн">
+
+          <div class="form-section-title">
+            <span>01</span>
+            <h4>Для кого створюємо сайт?</h4>
+          </div>
+
+          <div class="field">
+            <label for="yourName">Твоє ім’я <span>*</span></label>
+            <input id="yourName" name="yourName" type="text"
+              placeholder="Як до тебе звертатися?" required maxlength="100">
+          </div>
+
+          <div class="field">
+            <label for="recipientName">Ім’я отримувача <span>*</span></label>
+            <input id="recipientName" name="recipientName" type="text"
+              placeholder="Для кого цей подарунок?" required maxlength="100">
+          </div>
+
+          <div class="field-row">
+            <div class="field">
+              <label for="occasion">Який привід?</label>
+              <select id="occasion">
+                <option value="">Обери привід</option>
+                <option>День народження</option>
+                <option>Річниця</option>
+                <option>Подарунок без приводу</option>
+                <option>Для найкращої подруги або друга</option>
+                <option>Для коханої людини</option>
+                <option>Інше</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="date">Дата свята</label>
+              <input id="date" name="date" type="date">
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="contact">Твій Telegram або інший контакт <span>*</span></label>
+            <input id="contact" name="contact" type="text"
+              placeholder="@username або посилання на Telegram" required maxlength="150">
+            <small>Контакт потрібен, щоб уточнити деталі замовлення.</small>
+          </div>
+
+          <div class="form-divider"></div>
+
+          <div class="form-section-title">
+            <span>02</span>
+            <h4>Яким буде сайт?</h4>
+          </div>
+
+          <div class="field">
+            <label>Обери стиль оформлення</label>
+            <div class="choice-grid" id="styleChoices">
+              <label class="choice">
+                <input type="radio" name="siteStyle" value="Pinterest">
+                <span class="choice-emoji">🎀</span>
+                <span>Pinterest</span>
+              </label>
+              <label class="choice">
+                <input type="radio" name="siteStyle" value="Ніжний">
+                <span class="choice-emoji">🌷</span>
+                <span>Ніжний</span>
+              </label>
+              <label class="choice">
+                <input type="radio" name="siteStyle" value="Яскравий">
+                <span class="choice-emoji">✳</span>
+                <span>Яскравий</span>
+              </label>
+              <label class="choice">
+                <input type="radio" name="siteStyle" value="Мінімалістичний">
+                <span class="choice-emoji">♡</span>
+                <span>Мінімалізм</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="field">
+            <label>Що хотілося б додати?</label>
+            <div class="check-list">
+              <label class="check-option">
+                <input type="checkbox" name="extras" value="Музика">
+                <span class="custom-check">✓</span>
+                <span>Фонова музика</span>
+                <span class="option-icon">♫</span>
+              </label>
+              <label class="check-option">
+                <input type="checkbox" name="extras" value="Анімації">
+                <span class="custom-check">✓</span>
+                <span>Анімації та ефекти</span>
+                <span class="option-icon">✳</span>
+              </label>
+              <label class="check-option">
+                <input type="checkbox" name="extras" value="Приховані сюрпризи">
+                <span class="custom-check">✓</span>
+                <span>Приховані сюрпризи</span>
+                <span class="option-icon">🎁</span>
+              </label>
+              <label class="check-option">
+                <input type="checkbox" name="extras" value="Лист або привітання">
+                <span class="custom-check">✓</span>
+                <span>Лист або привітання</span>
+                <span class="option-icon">💌</span>
+              </label>
+              <label class="check-option">
+                <input type="checkbox" name="extras" value="Фото та спогади">
+                <span class="custom-check">✓</span>
+                <span>Фото та спогади</span>
+                <span class="option-icon">📸</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="music">Музика для сайту</label>
+            <input id="music" name="music" type="text"
+              placeholder="Назва пісні або посилання (необов’язково)" maxlength="300">
+          </div>
+
+          <div class="field">
+            <label for="greeting">Текст привітання або побажання</label>
+            <textarea id="greeting" name="greeting" rows="4"
+              placeholder="Що хочеш написати отримувачу? Можеш залишити поле порожнім."
+              maxlength="3000"></textarea>
+          </div>
+
+          <div class="field">
+            <label for="wishes">Особливі побажання до сайту</label>
+            <textarea id="wishes" name="wishes" rows="4"
+              placeholder="Кольори, ідеї, деталі, приклади сайтів або будь-які інші побажання..."
+              maxlength="3000"></textarea>
+          </div>
+
+          <div class="form-divider"></div>
+
+          <div class="form-section-title">
+            <span>03</span>
+            <h4>Додай фотографії</h4>
+          </div>
+
+          <div class="upload-area">
+            <input id="photos" name="photos" type="file" accept="image/*" multiple>
+            <label for="photos" class="upload-label">
+              <span class="upload-icon">＋</span>
+              <strong>Обери фотографії</strong>
+              <span>Можна вибрати декілька зображень</span>
+            </label>
+            <div id="photoPreview" class="photo-preview"></div>
+            <small>Додавай лише ті фотографії, які хочеш використати на сайті.</small>
+          </div>
+
+          <label class="privacy-check">
+            <input id="confirmInfo" type="checkbox" required>
+            <span>Я перевірила введені дані та хочу надіслати замовлення.</span>
+          </label>
+
+          <div id="formMessage" class="form-message" role="status" aria-live="polite"></div>
+
+          <button id="submitButton" type="submit" class="button button-dark submit-button">
+            Надіслати замовлення <span>↗</span>
+          </button>
+
+          <p class="form-footnote">
+            Після надсилання ми зв’яжемося з тобою для уточнення деталей та оплати.
+          </p>
+        </form>
+
+        <div id="successPanel" class="success-panel" hidden>
+          <div class="success-heart">♡</div>
+          <h3>Замовлення надіслано!</h3>
+          <p>
+            Дякуємо за довіру до kvisite. Очікуй повідомлення для уточнення
+            деталей, оплати та подальшого створення твого сайту.
+          </p>
+          <a href="https://t.me/kvisite" target="_blank" rel="noopener" class="button button-dark">
+            Наш Telegram ↗
+          </a>
+          <button type="button" id="newOrderButton" class="text-button">Створити ще одне замовлення</button>
+        </div>
+      </div>
     </section>
 
+    <section class="final-note">
+      <div class="final-doodle">♡</div>
+      <span class="eyebrow">ДЛЯ ТИХ, ХТО ВАЖЛИВИЙ</span>
+      <h2>Нехай твій подарунок<br>скаже більше, ніж слова.</h2>
+      <a href="#order" class="button button-light">Почати створення ↗</a>
+      <span class="final-flower">✿</span>
+    </section>
   </main>
 
-  <footer>
-
-    <strong>
-      kvisite
-    </strong>
-
-    — сайт, який хочеться запам'ятати
-
+  <footer class="footer">
+    <a class="logo footer-logo" href="#home">kvisite<span>♡</span></a>
+    <p>Персональні сайти для особливих моментів.</p>
+    <a href="https://t.me/kvisite" target="_blank" rel="noopener">Telegram ↗</a>
+    <div class="footer-bottom">створено з любов’ю ♡ kvisite</div>
   </footer>
 
   <script>
+    const WORKER_URL = "https://kvisite-orders.k2503212.workers.dev/";
 
-    const WORKER_URL =
-      "https://kvisite-api-2.k2503212.workers.dev/";
+    const orderForm = document.getElementById("orderForm");
+    const submitButton = document.getElementById("submitButton");
+    const formMessage = document.getElementById("formMessage");
+    const photosInput = document.getElementById("photos");
+    const photoPreview = document.getElementById("photoPreview");
+    const successPanel = document.getElementById("successPanel");
+    const progressBar = document.getElementById("formProgress");
+    const progressText = document.getElementById("progressText");
 
-    const photos =
-      document.getElementById("photos");
+    function updateProgress() {
+      const requiredFields = [
+        document.getElementById("yourName"),
+        document.getElementById("recipientName"),
+        document.getElementById("contact")
+      ];
 
-    const selectedFiles =
-      document.getElementById("selectedFiles");
+      const completed = requiredFields.filter(field => field.value.trim()).length;
+      progressBar.style.width = `${(completed / requiredFields.length) * 100}%`;
+      progressText.textContent = completed === requiredFields.length
+        ? "Основні поля заповнено ♡"
+        : `Заповнено ${completed} з ${requiredFields.length} обов’язкових полів`;
+    }
 
-    photos.addEventListener(
-      "change",
-      function () {
+    orderForm.querySelectorAll("input, textarea, select").forEach(field => {
+      field.addEventListener("input", updateProgress);
+      field.addEventListener("change", updateProgress);
+    });
 
-        const files =
-          Array.from(this.files);
+    photosInput.addEventListener("change", () => {
+      photoPreview.innerHTML = "";
+      const files = Array.from(photosInput.files || []);
 
-        if (files.length === 0) {
+      files.forEach(file => {
+        const item = document.createElement("div");
+        item.className = "preview-item";
 
-          selectedFiles.textContent = "";
+        const name = document.createElement("span");
+        name.textContent = file.name;
 
-          return;
+        const size = document.createElement("small");
+        size.textContent = `${Math.max(1, Math.round(file.size / 1024))} КБ`;
+
+        item.append(name, size);
+        photoPreview.appendChild(item);
+      });
+
+      if (files.length) {
+        formMessage.textContent = `Обрано фотографій: ${files.length}`;
+        formMessage.className = "form-message info";
+      } else {
+        formMessage.textContent = "";
+        formMessage.className = "form-message";
+      }
+    });
+
+    orderForm.addEventListener("submit", async event => {
+      event.preventDefault();
+
+      if (!orderForm.reportValidity()) return;
+
+      submitButton.disabled = true;
+      submitButton.innerHTML = 'Надсилаємо замовлення… <span>♡</span>';
+      formMessage.textContent = "";
+      formMessage.className = "form-message";
+
+      const data = new FormData(orderForm);
+
+      // Один тариф для всіх замовлень.
+      data.set("tariff", "Персональний сайт — 150 грн");
+
+      // Додаткові поля збираємо в wishes, щоб зберегти сумісність із Worker.
+      const occasion = document.getElementById("occasion").value || "Не вказано";
+      const selectedStyle = orderForm.querySelector('input[name="siteStyle"]:checked');
+      const siteStyle = selectedStyle ? selectedStyle.value : "На розсуд виконавця";
+      const extras = Array.from(orderForm.querySelectorAll('input[name="extras"]:checked'))
+        .map(input => input.value);
+
+      const extraDetails = [
+        `Привід: ${occasion}`,
+        `Стиль: ${siteStyle}`,
+        `Бажані елементи: ${extras.length ? extras.join(", ") : "Не вказано"}`,
+        `Побажання: ${document.getElementById("wishes").value.trim() || "Не вказано"}`
+      ].join("\n");
+
+      data.set("wishes", extraDetails);
+
+      // Worker отримує фотографії через formData.getAll("photos").
+      try {
+        const response = await fetch(WORKER_URL, {
+          method: "POST",
+          body: data
+        });
+
+        if (!response.ok) {
+          throw new Error("Не вдалося надіслати замовлення.");
         }
 
-        selectedFiles.textContent =
-          `Обрано фотографій: ${files.length}`;
-
+        orderForm.hidden = true;
+        document.querySelector(".progress-wrap").hidden = true;
+        successPanel.hidden = false;
+        successPanel.scrollIntoView({ behavior: "smooth", block: "center" });
+      } catch (error) {
+        formMessage.textContent =
+          "Не вдалося надіслати замовлення. Перевір з’єднання з інтернетом і спробуй ще раз.";
+        formMessage.className = "form-message error";
+      } finally {
+        submitButton.disabled = false;
+        submitButton.innerHTML = 'Надіслати замовлення <span>↗</span>';
       }
+    });
+
+    document.getElementById("newOrderButton").addEventListener("click", () => {
+      orderForm.reset();
+      orderForm.hidden = false;
+      successPanel.hidden = true;
+      document.querySelector(".progress-wrap").hidden = false;
+      photoPreview.innerHTML = "";
+      formMessage.textContent = "";
+      updateProgress();
+      document.getElementById("order").scrollIntoView({ behavior: "smooth" });
+    });
+
+    const revealItems = document.querySelectorAll(
+      ".feature-card, .step, .price-card, .form-card, .order-intro"
     );
 
-
-    const form =
-      document.getElementById("orderForm");
-
-    const success =
-      document.getElementById("success");
-
-    const error =
-      document.getElementById("error");
-
-    const submitButton =
-      document.getElementById("submitButton");
-
-
-    form.addEventListener(
-      "submit",
-      async function (event) {
-
-        event.preventDefault();
-
-        error.style.display = "none";
-
-        submitButton.disabled = true;
-        submitButton.textContent = "Відправляємо...";
-
-
-        const formData =
-          new FormData();
-
-        formData.append(
-          "yourName",
-          document.getElementById("customerName").value
-        );
-
-        formData.append(
-          "recipientName",
-          document.getElementById("recipientName").value
-        );
-
-        formData.append(
-          "date",
-          document.getElementById("birthday").value
-        );
-
-        formData.append(
-          "greeting",
-          document.getElementById("message").value
-        );
-
-        formData.append(
-          "music",
-          document.getElementById("music").value
-        );
-
-        formData.append(
-          "contact",
-          document.getElementById("contact").value
-        );
-        formData.append(
-          "tariff",
-          document.querySelector('select[name="tariff"]').value
-        );
-
-        formData.append(
-          "wishes",
-          document.querySelector('textarea[name="wishes"]').value
-        );
-
-
-        const files =
-          Array.from(photos.files);
-
-        files.forEach(
-          function (file) {
-
-            formData.append(
-              "photos",
-              file,
-              file.name
-            );
-
+    if ("IntersectionObserver" in window) {
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+            observer.unobserve(entry.target);
           }
-        );
+        });
+      }, { threshold: 0.12 });
 
+      revealItems.forEach(item => {
+        item.classList.add("reveal");
+        observer.observe(item);
+      });
+    }
 
-        try {
-
-          const response =
-            await fetch(
-              WORKER_URL,
-              {
-                method: "POST",
-                body: formData
-              }
-            );
-
-
-          const result =
-            await response.json();
-
-
-          if (!response.ok || !result.ok) {
-            throw new Error("Order failed");
-          }
-
-
-          form.style.display = "none";
-
-          success.style.display = "block";
-
-          window.scrollTo({
-            top:
-              document.getElementById("order")
-              .offsetTop - 80,
-
-            behavior: "smooth"
-          });
-
-
-        } catch (err) {
-
-          console.error(err);
-
-          error.style.display = "block";
-
-          submitButton.disabled = false;
-          submitButton.textContent =
-            "Оформити замовлення";
-
-        }
-
-      }
-    );
-
+    updateProgress();
   </script>
-
 </body>
 </html>
