@@ -6,160 +6,178 @@ export default {
     const corsHeaders = {
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Methods": "POST, OPTIONS",
-      "Access-Control-Allow-Headers": "Content-Type",
+      "Access-Control-Allow-Headers": "Content-Type"
     };
+
+    const json = (data, status = 200) =>
+      new Response(JSON.stringify(data), {
+        status,
+        headers: {
+          "Content-Type": "application/json; charset=utf-8",
+          ...corsHeaders
+        }
+      });
 
     if (request.method === "OPTIONS") {
       return new Response(null, {
         status: 204,
-        headers: corsHeaders,
+        headers: corsHeaders
       });
     }
 
     if (request.method !== "POST") {
-      return new Response(
-        JSON.stringify({
-          ok: true,
-          message: "kvisite orders worker is working",
-        }),
-        {
-          status: 200,
-          headers: {
-            "Content-Type": "application/json",
-            ...corsHeaders,
-          },
-        }
-      );
+      return json({
+        ok: true,
+        message: "Kvisite orders worker is working"
+      });
     }
 
     try {
-      const formData = await request.formData();
-
-      const yourName = formData.get("yourName") || "Не указано";
-      const recipientName =
-        formData.get("recipientName") || "Не указано";
-      const date = formData.get("date") || "Не указано";
-      const greeting = formData.get("greeting") || "Не указано";
-      const music = formData.get("music") || "Не указано";
-      const contact = formData.get("contact") || "Не указано";
-      const tariff = formData.get("tariff") || "Не указано";
-      const wishes = formData.get("wishes") || "Не указано";
-
-      const message =
-        `🎀 НОВЕ ЗАМОВЛЕННЯ kvisite\n\n` +
-        `👤 Твоє ім'я: ${yourName}\n` +
-        `💗 Ім'я отримувача: ${recipientName}\n` +
-        `📅 Дата: ${date}\n\n` +
-        `💌 Текст / привітання:\n${greeting}\n\n` +
-        `🎵 Музика: ${music}\n` +
-        `📱 Контакт: ${contact}\n\n` +
-        `💰 Тариф: ${tariff}\n\n` +
-        `✨ Побажання щодо сайту:\n${wishes}`;
-
-      const telegramMessage = await fetch(
-        TELEGRAM_API(env.BOT_TOKEN, "sendMessage"),
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            chat_id: env.CHAT_ID,
-            text: message,
-          }),
-        }
-      );
-
-      const telegramMessageResult =
-        await telegramMessage.json();
-
-      if (!telegramMessage.ok || !telegramMessageResult.ok) {
-        return new Response(
-          JSON.stringify({
-            ok: false,
-            step: "sendMessage",
-            telegram: telegramMessageResult,
-          }),
-          {
-            status: 500,
-            headers: {
-              "Content-Type": "application/json",
-              ...corsHeaders,
-            },
-          }
-        );
+      if (!env.BOT_TOKEN || !env.CHAT_ID) {
+        return json({
+          ok: false,
+          error: "Worker secrets are not configured."
+        }, 500);
       }
 
-      const photos = formData.getAll("photos");
+      const form = await request.formData();
+      const rawDetails = form.get("orderDetails");
 
-      for (const photo of photos) {
-        if (!(photo instanceof File) || photo.size === 0) {
-          continue;
-        }
+      if (!rawDetails) {
+        return json({
+          ok: false,
+          error: "Order details are missing."
+        }, 400);
+      }
 
-        const photoData = new FormData();
+      let details;
+      try {
+        details = JSON.parse(rawDetails);
+      } catch {
+        return json({
+          ok: false,
+          error: "Order details are invalid."
+        }, 400);
+      }
 
-        photoData.append("chat_id", env.CHAT_ID);
-        photoData.append("photo", photo, photo.name);
+      const safe = value => {
+        if (Array.isArray(value)) return value.join(", ") || "Не вказано";
+        if (value === null || value === undefined || value === "") return "Не вказано";
+        return String(value);
+      };
 
-        const telegramPhoto = await fetch(
-          TELEGRAM_API(env.BOT_TOKEN, "sendPhoto"),
+      const message = [
+        "🎀 НОВЕ ЗАМОВЛЕННЯ KVISITE",
+        "",
+        `Для кого сайт: ${safe(details.forWhom)}`,
+        `Ім’я отримувача: ${safe(details.recipientName)}`,
+        `Форми імені: ${safe(details.nameForms)}`,
+        `Привід: ${safe(details.occasion)}`,
+        `Потрібно до: ${safe(details.deadline)}`,
+        "",
+        "ДИЗАЙН",
+        `Опис: ${safe(details.design)}`,
+        `Шрифт: ${safe(details.font)}`,
+        `Пристрій: ${safe(details.device)}`,
+        "",
+        "ІДЕЯ САЙТУ",
+        safe(details.idea),
+        "",
+        `Функції: ${safe(details.features)}`,
+        `Посилання на музику: ${safe(details.musicLink)}`,
+        `Фотографії: ${safe(details.photos)}`,
+        `Відео: ${safe(details.video)}`,
+        `Аудіофайл: ${safe(details.musicFile)}`,
+        "",
+        `Додаткові побажання: ${safe(details.extraWishes)}`,
+        "",
+        `Контакт: ${safe(details.contact)}`,
+        `Вартість: ${safe(form.get("tariff"))}`
+      ].join("\n");
+
+      const sendTelegram = async (method, body) => {
+        const response = await fetch(
+          TELEGRAM_API(env.BOT_TOKEN, method),
           {
             method: "POST",
-            body: photoData,
+            body
           }
         );
 
-        const telegramPhotoResult =
-          await telegramPhoto.json();
+        const result = await response.json();
 
-        if (!telegramPhoto.ok || !telegramPhotoResult.ok) {
-          return new Response(
-            JSON.stringify({
-              ok: false,
-              step: "sendPhoto",
-              telegram: telegramPhotoResult,
-            }),
-            {
-              status: 500,
-              headers: {
-                "Content-Type": "application/json",
-                ...corsHeaders,
-              },
-            }
+        if (!response.ok || !result.ok) {
+          throw new Error(
+            result.description || `Telegram ${method} failed`
           );
+        }
+
+        return result;
+      };
+
+      await sendTelegram(
+        "sendMessage",
+        (() => {
+          const body = new FormData();
+          body.append("chat_id", env.CHAT_ID);
+          body.append("text", message);
+          return body;
+        })()
+      );
+
+      const photos = form.getAll("photos");
+      const video = form.get("videoFile");
+      const audio = form.get("musicFile");
+      const warnings = [];
+
+      for (const photo of photos) {
+        if (!(photo instanceof File) || photo.size === 0) continue;
+
+        try {
+          const body = new FormData();
+          body.append("chat_id", env.CHAT_ID);
+          body.append("photo", photo, photo.name);
+          body.append("caption", `Фото до замовлення Kvisite: ${photo.name}`);
+          await sendTelegram("sendPhoto", body);
+        } catch (error) {
+          warnings.push(`Фото ${photo.name}: ${error.message}`);
         }
       }
 
-      return new Response(
-        JSON.stringify({
-          ok: true,
-          message: "Замовлення успішно відправлено",
-        }),
-        {
-          status: 200,
-          headers: {
-            "Content-Type": "application/json",
-            ...corsHeaders,
-          },
+      if (video instanceof File && video.size > 0) {
+        try {
+          const body = new FormData();
+          body.append("chat_id", env.CHAT_ID);
+          body.append("video", video, video.name);
+          body.append("caption", `Відео до замовлення Kvisite: ${video.name}`);
+          await sendTelegram("sendVideo", body);
+        } catch (error) {
+          warnings.push(`Відео: ${error.message}`);
         }
-      );
+      }
 
-    } catch (error) {
-      return new Response(
-        JSON.stringify({
-          ok: false,
-          step: "worker",
-          error: String(error),
-        }),
-        {
-          status: 500,
-          headers: {
-            "Content-Type": "application/json",
-            ...corsHeaders,
-          },
+      if (audio instanceof File && audio.size > 0) {
+        try {
+          const body = new FormData();
+          body.append("chat_id", env.CHAT_ID);
+          body.append("audio", audio, audio.name);
+          body.append("caption", `Музика до замовлення Kvisite: ${audio.name}`);
+          await sendTelegram("sendAudio", body);
+        } catch (error) {
+          warnings.push(`Аудіо: ${error.message}`);
         }
-      );
+      }
+
+      return json({
+        ok: true,
+        message: "Заявку надіслано",
+        warnings
+      });
+    } catch (error) {
+      return json({
+        ok: false,
+        error: String(error.message || error)
+      }, 500);
     }
-  },
+  }
 };
