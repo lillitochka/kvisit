@@ -1,577 +1,81 @@
-
-<!doctype html>
+<!DOCTYPE html>
 <html lang="uk">
 <head>
-  <meta charset="utf-8">
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#fff9f7">
-  <meta name="description" content="Персональні сайти на замовлення від kvisite — 150 грн.">
-  <title>kvisite — твій сайт ♡</title>
+  <meta name="theme-color" content="#fffaf8">
+  <meta name="description" content="Персональні сайти для особливих моментів. Kvisite — 150 грн.">
+  <title>Kvisite — персональні сайти</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <main class="landing">
-    <header class="brand">kvisite<span>♡</span></header>
+  <main class="home">
+    <header class="wordmark">K V I S I T E</header>
 
     <section class="hero">
-      <div class="eyebrow"><span class="sparkle">✳</span> САЙТИ З ТВОЄЮ ІДЕЄЮ</div>
-      <h1>Твоя ідея.<br><span>Твій сайт.</span></h1>
-      <p class="intro">Створюю персональні сайти для особливих людей, спогадів і моментів.</p>
-      <div class="price-line"><strong>150 ₴</strong><span>за сайт</span></div>
-      <button class="primary-button" id="openOrder" type="button">Замовити сайт <span>↗</span></button>
-      <p class="small-note">Спочатку обговоримо твою ідею та складність, а потім домовимося про оплату.</p>
-    </section>
-
-    <div class="decor decor-one" aria-hidden="true">♡</div>
-    <div class="decor decor-two" aria-hidden="true">✳</div>
-    <footer class="footer">зроблено з любов’ю · kvisite</footer>
-  </main>
-
-  <div class="modal" id="orderModal" aria-hidden="true">
-    <div class="modal-backdrop" data-close-modal></div>
-    <section class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="formTitle">
-      <div class="modal-top">
-        <div>
-          <div class="modal-kicker">K V I S I T E · ЗАМОВЛЕННЯ</div>
-          <h2 id="formTitle">Розкажи свою ідею ♡</h2>
+      <div class="hero-art" aria-label="Ніжна кремова тканина з рожевим бантом">
+        <div class="silk silk-one"></div>
+        <div class="silk silk-two"></div>
+        <div class="bow" aria-hidden="true">
+          <span class="bow-loop bow-left"></span>
+          <span class="bow-loop bow-right"></span>
+          <span class="bow-knot"></span>
+          <span class="bow-tail bow-tail-left"></span>
+          <span class="bow-tail bow-tail-right"></span>
         </div>
-        <button class="close-button" type="button" aria-label="Закрити форму" data-close-modal>×</button>
       </div>
 
-      <p class="modal-description">Заповни те, що вже знаєш. Необов’язкові поля можна залишити порожніми.</p>
+      <p class="eyebrow">ТВОЯ ІДЕЯ · ТВОЯ ІСТОРІЯ</p>
+      <h1>Персональні сайти<br>для особливих моментів</h1>
+      <p class="hero-text">
+        Створюю особливі сайти для подарунків, спогадів
+        та людей, яким хочеться подарувати щось незабутнє.
+      </p>
 
-      <form id="orderForm">
-        <section class="form-section expanded" data-section>
-          <button class="section-heading" type="button" aria-expanded="true">
-            <span class="step-number">01</span>
-            <span><strong>Про замовлення</strong><small>Для кого створюємо сайт</small></span>
-            <span class="chevron">⌄</span>
-          </button>
-          <div class="section-content">
-            <div class="field-grid">
-              <label class="field">Твоє ім’я <span>*</span>
-                <input name="yourName" required maxlength="100" placeholder="Як до тебе звертатися?">
-              </label>
-              <label class="field">Для кого сайт? <span>*</span>
-                <input name="recipientName" required maxlength="100" placeholder="Ім’я людини або назва">
-              </label>
-              <label class="field">Привід
-                <input name="occasion" maxlength="150" placeholder="День народження, подарунок…">
-              </label>
-              <label class="field">Дата свята
-                <input name="date" type="date">
-              </label>
-            </div>
-            <label class="field">Як з тобою зв’язатися? <span>*</span>
-              <input name="contact" required maxlength="200" placeholder="Telegram, Instagram, номер або інший контакт">
-            </label>
-          </div>
-        </section>
+      <div class="price-card">
+        <span>Вартість сайту</span>
+        <strong>150 грн</strong>
+        <small>Якщо ідея складніша, деталі обговоримо заздалегідь</small>
+      </div>
 
-        <section class="form-section expanded" data-section>
-          <button class="section-heading" type="button" aria-expanded="true">
-            <span class="step-number">02</span>
-            <span><strong>Дизайн</strong><small>Стиль, кольори та настрій</small></span>
-            <span class="chevron">⌄</span>
-          </button>
-          <div class="section-content">
-            <label class="field">Який стиль ти уявляєш?
-              <textarea name="style" rows="2" maxlength="1500" placeholder="Опиши будь-який стиль, який тобі подобається"></textarea>
-            </label>
+      <a class="button button-primary" href="order.html">
+        Замовити сайт <span aria-hidden="true">↗</span>
+      </a>
 
-            <div class="field">
-              <span class="field-title">Обери кольори</span>
-              <div class="swatches">
-                <label class="swatch"><input type="checkbox" name="colors" value="Молочний"><span style="--swatch:#fff4e9"></span><small>Молочний</small></label>
-                <label class="swatch"><input type="checkbox" name="colors" value="Рожевий"><span style="--swatch:#f4b8d2"></span><small>Рожевий</small></label>
-                <label class="swatch"><input type="checkbox" name="colors" value="Червоний"><span style="--swatch:#d95765"></span><small>Червоний</small></label>
-                <label class="swatch"><input type="checkbox" name="colors" value="Помаранчевий"><span style="--swatch:#f2a05c"></span><small>Помаранч.</small></label>
-                <label class="swatch"><input type="checkbox" name="colors" value="Жовтий"><span style="--swatch:#f2d76c"></span><small>Жовтий</small></label>
-                <label class="swatch"><input type="checkbox" name="colors" value="Зелений"><span style="--swatch:#9dbb9a"></span><small>Зелений</small></label>
-                <label class="swatch"><input type="checkbox" name="colors" value="Блакитний"><span style="--swatch:#a9d5eb"></span><small>Блакитний</small></label>
-                <label class="swatch"><input type="checkbox" name="colors" value="Синій"><span style="--swatch:#6178bd"></span><small>Синій</small></label>
-                <label class="swatch"><input type="checkbox" name="colors" value="Фіолетовий"><span style="--swatch:#b9a2d8"></span><small>Фіолетовий</small></label>
-                <label class="swatch"><input type="checkbox" name="colors" value="Коричневий"><span style="--swatch:#9a715b"></span><small>Коричневий</small></label>
-                <label class="swatch"><input type="checkbox" name="colors" value="Чорний"><span style="--swatch:#211b20"></span><small>Чорний</small></label>
-                <label class="swatch"><input type="checkbox" name="colors" value="Сірий"><span style="--swatch:#c9c4c6"></span><small>Сірий</small></label>
-              </div>
-            </div>
-
-            <label class="field">Власні кольори або HEX-коди
-              <input name="customColors" maxlength="300" placeholder="Наприклад, #ff65ad, темно-зелений">
-            </label>
-            <label class="field">Опиши дизайн детальніше
-              <textarea name="designDescription" rows="3" maxlength="3000" placeholder="Які декорації, шрифти, елементи чи настрій хочеш бачити?"></textarea>
-            </label>
-
-            <div class="field">
-              <span class="field-title">На яких пристроях сайт має бути особливо зручним?</span>
-              <div class="choice-row">
-                <label class="choice"><input type="checkbox" name="devices" value="Телефон"><span>📱 Телефон</span></label>
-                <label class="choice"><input type="checkbox" name="devices" value="Планшет"><span>Планшет</span></label>
-                <label class="choice"><input type="checkbox" name="devices" value="Комп’ютер"><span>🖥 Комп’ютер</span></label>
-                <label class="choice"><input type="checkbox" name="devices" value="Усі пристрої"><span>Усі пристрої</span></label>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section class="form-section" data-section>
-          <button class="section-heading" type="button" aria-expanded="false">
-            <span class="step-number">03</span>
-            <span><strong>Екрани сайту</strong><small>До 10 екранів, кожен можна описати окремо</small></span>
-            <span class="chevron">⌄</span>
-          </button>
-          <div class="section-content" hidden>
-            <p class="helper">Додавай екрани по одному. Назва й опис обов’язкові, усе інше — за бажанням.</p>
-            <div id="screensList" class="screens-list"></div>
-            <button class="secondary-button" id="addScreen" type="button">＋ Додати ще один екран</button>
-          </div>
-        </section>
-
-        <section class="form-section" data-section>
-          <button class="section-heading" type="button" aria-expanded="false">
-            <span class="step-number">04</span>
-            <span><strong>Функції та матеріали</strong><small>Що має вміти сайт</small></span>
-            <span class="chevron">⌄</span>
-          </button>
-          <div class="section-content" hidden>
-            <div class="field">
-              <span class="field-title">Які функції потрібні?</span>
-              <div class="choice-grid">
-                <label class="choice"><input type="checkbox" name="features" value="Фото"><span>Фото</span></label>
-                <label class="choice"><input type="checkbox" name="features" value="Музика"><span>Музика</span></label>
-                <label class="choice"><input type="checkbox" name="features" value="Анімації"><span>Анімації</span></label>
-                <label class="choice"><input type="checkbox" name="features" value="Лист або привітання"><span>Лист або привітання</span></label>
-                <label class="choice"><input type="checkbox" name="features" value="Галерея спогадів"><span>Галерея спогадів</span></label>
-                <label class="choice"><input type="checkbox" name="features" value="Відео"><span>Відео</span></label>
-              </div>
-            </div>
-
-            <label class="field">Посилання на музику
-              <input name="music" type="url" placeholder="https://…">
-            </label>
-            <label class="field">Як має запускатися музика?
-              <select name="musicStart">
-                <option value="">Не потрібно / ще не знаю</option>
-                <option value="Автоматично, якщо браузер дозволить">Автоматично, якщо браузер дозволить</option>
-                <option value="Після натискання кнопки">Після натискання кнопки</option>
-              </select>
-            </label>
-            <label class="field">Музика: файл або додаткові побажання
-              <textarea name="musicNotes" rows="2" placeholder="Назва пісні, де має грати тощо"></textarea>
-            </label>
-            <label class="field">Опис анімацій
-              <textarea name="animationNotes" rows="2" placeholder="Наприклад, плавна поява тексту, сердечка чи рухомі наліпки"></textarea>
-            </label>
-
-            <div class="upload-card">
-              <div>
-                <strong>Матеріали</strong>
-                <p>До 10 фото та 1 відео. Для кожного фото можна вказати екран.</p>
-              </div>
-              <label class="field">Фотографії (до 10)
-                <input id="photoFiles" name="photos" type="file" accept="image/*" multiple>
-                <small class="file-note" id="photoCount">Файли не вибрано</small>
-              </label>
-              <div id="photoScreenAssignments" class="assignment-list"></div>
-              <label class="field">Відео (до 1)
-                <input id="videoFile" name="videoFile" type="file" accept="video/*">
-                <small class="file-note" id="videoCount">Файл не вибрано</small>
-              </label>
-              <label class="field">Посилання на відео
-                <input name="videoLink" type="url" placeholder="https://…">
-              </label>
-              <label class="field">Аудіофайл із музикою
-                <input id="audioFile" name="musicFile" type="file" accept="audio/*">
-                <small class="file-note" id="audioCount">Файл не вибрано</small>
-              </label>
-              <p class="helper">Посилання на великі файли можуть бути зручнішими. Надсилання відео й аудіо вкладеннями потребує підтримки з боку обробника замовлень.</p>
-            </div>
-          </div>
-        </section>
-
-        <section class="form-section" data-section>
-          <button class="section-heading" type="button" aria-expanded="false">
-            <span class="step-number">05</span>
-            <span><strong>Відправлення</strong><small>Термін і додаткові побажання</small></span>
-            <span class="chevron">⌄</span>
-          </button>
-          <div class="section-content" hidden>
-            <label class="field">До якої дати потрібен сайт?
-              <input name="deadline" type="date">
-            </label>
-            <label class="field">Додаткові побажання
-              <textarea name="extraWishes" rows="3" placeholder="Усе, що ще важливо знати"></textarea>
-            </label>
-            <div class="price-note">
-              <strong>Вартість — 150 грн</strong>
-              <p>Перед оплатою я перегляну ідею та зв’яжуся з тобою, щоб обговорити складність і можливості. Якщо задум складний, домовимося про все заздалегідь.</p>
-            </div>
-            <label class="consent">
-              <input type="checkbox" name="confirmDetails" required>
-              <span>Я перевірив/перевірила контактні дані та погоджуюся на надсилання замовлення.</span>
-            </label>
-          </div>
-        </section>
-
-        <div class="submit-area">
-          <p id="formStatus" role="status" aria-live="polite"></p>
-          <button class="primary-button submit-button" type="submit" id="submitOrder">Надіслати замовлення <span>↗</span></button>
-          <p class="submit-note">Надсилання заявки не означає автоматичного підтвердження замовлення.</p>
-        </div>
-      </form>
+      <p class="hero-note">
+        Спочатку обговоримо твою ідею, можливості та оплату.
+      </p>
     </section>
-  </div>
 
-  <div class="toast" id="successToast" role="status" aria-live="polite">
-    <strong>Замовлення надіслано! ♡</strong>
-    <span>Дякуємо! Я перегляну ідею та зв’яжуся з тобою, щоб обговорити деталі й оплату.</span>
-  </div>
+    <section class="how-section">
+      <p class="eyebrow">ПРОСТО ТА ЗРУЧНО</p>
+      <h2>Як усе відбувається</h2>
 
-  <script>
-    (() => {
-      const WORKER_URL = 'https://kvisite-orders.k2503212.workers.dev/';
-      const modal = document.getElementById('orderModal');
-      const form = document.getElementById('orderForm');
-      const status = document.getElementById('formStatus');
-      const submitButton = document.getElementById('submitOrder');
-      const screensList = document.getElementById('screensList');
-      const addScreenButton = document.getElementById('addScreen');
-      let screenCount = 0;
+      <div class="steps">
+        <article class="step-card">
+          <span class="step-number">01</span>
+          <h3>Твоя ідея</h3>
+          <p>Розкажи, який сайт ти хочеш створити.</p>
+        </article>
 
-      function openModal() {
-        modal.classList.add('is-open');
-        modal.setAttribute('aria-hidden', 'false');
-        document.body.classList.add('modal-open');
-        document.querySelector('.close-button').focus();
-      }
+        <article class="step-card">
+          <span class="step-number">02</span>
+          <h3>Обговорення</h3>
+          <p>Я перегляну заявку та зв’яжуся з тобою.</p>
+        </article>
 
-      function closeModal() {
-        modal.classList.remove('is-open');
-        modal.setAttribute('aria-hidden', 'true');
-        document.body.classList.remove('modal-open');
-        document.getElementById('openOrder').focus();
-      }
+        <article class="step-card">
+          <span class="step-number">03</span>
+          <h3>Створення</h3>
+          <p>Після узгодження деталей почнемо роботу.</p>
+        </article>
+      </div>
+    </section>
 
-      document.getElementById('openOrder').addEventListener('click', openModal);
-      modal.querySelectorAll('[data-close-modal]').forEach(el => el.addEventListener('click', closeModal));
-
-      document.addEventListener('keydown', e => {
-        if (e.key === 'Escape' && modal.classList.contains('is-open')) closeModal();
-      });
-
-      document.querySelectorAll('.section-heading').forEach(button => {
-        button.addEventListener('click', () => {
-          const section = button.closest('[data-section]');
-          const content = section.querySelector('.section-content');
-          const opening = content.hidden;
-          content.hidden = !opening;
-          section.classList.toggle('expanded', opening);
-          button.setAttribute('aria-expanded', String(opening));
-        });
-      });
-
-      function escapeHtml(value) {
-        return String(value).replace(/[&<>"']/g, char => ({
-          '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
-        }[char]));
-      }
-
-      function screenOptions() {
-        return Array.from(screensList.querySelectorAll('.screen-card')).map((card, i) => {
-          const title = card.querySelector('[name="screenTitle"]').value.trim();
-          return { value: String(i + 1), label: title || `Екран ${i + 1}` };
-        });
-      }
-
-      function refreshAssignments() {
-        document.querySelectorAll('.screen-assignment').forEach(select => {
-          const previous = select.value;
-          select.innerHTML = '<option value="">Ще не визначено</option>' +
-            screenOptions().map(s => `<option value="${s.value}">${escapeHtml(s.label)}</option>`).join('');
-          if ([...select.options].some(o => o.value === previous)) select.value = previous;
-        });
-      }
-
-      function renumberScreens() {
-        const cards = [...screensList.querySelectorAll('.screen-card')];
-        screenCount = cards.length;
-
-        cards.forEach((card, i) => {
-          card.querySelector('.screen-badge').textContent = `Екран ${i + 1}`;
-          card.dataset.screenNumber = String(i + 1);
-        });
-
-        addScreenButton.disabled = screenCount >= 10;
-        addScreenButton.textContent = screenCount >= 10
-          ? 'Додано максимум 10 екранів'
-          : '＋ Додати ще один екран';
-      }
-
-      function addScreen() {
-        if (screenCount >= 10) return;
-
-        screenCount++;
-        const number = screenCount;
-        const card = document.createElement('article');
-        card.className = 'screen-card';
-
-        card.innerHTML = `
-          <div class="screen-card-top">
-            <span class="screen-badge">Екран ${number}</span>
-            ${number > 1 ? '<button type="button" class="remove-screen">Видалити ×</button>' : ''}
-          </div>
-          <label class="field">Назва екрана <span>*</span>
-            <input name="screenTitle" required maxlength="120" placeholder="Наприклад, Привітання">
-          </label>
-          <label class="field">Що має бути на цьому екрані? <span>*</span>
-            <textarea name="screenDescription" required rows="3" maxlength="3000" placeholder="Опиши розташування елементів, що має бачити людина та як екран має виглядати"></textarea>
-            <small class="field-hint">Підказка: де розмістити текст і фото? Який декор додати? Яке враження має створювати екран?</small>
-          </label>
-          <label class="field">Текст на екрані
-            <textarea name="screenText" rows="2" maxlength="3000" placeholder="Можна залишити порожнім, якщо текст ще не готовий"></textarea>
-          </label>
-          <label class="field">Кнопки та їхня дія
-            <textarea name="screenButtons" rows="2" maxlength="1500" placeholder="Наприклад: кнопка «Відкрити лист» показує текст"></textarea>
-          </label>
-          <label class="field">Анімації на цьому екрані
-            <textarea name="screenAnimations" rows="2" maxlength="1000" placeholder="Необов’язково"></textarea>
-          </label>
-        `;
-
-        screensList.appendChild(card);
-        card.querySelector('[name="screenTitle"]').addEventListener('input', refreshAssignments);
-
-        const remove = card.querySelector('.remove-screen');
-        if (remove) {
-          remove.addEventListener('click', () => {
-            card.remove();
-            renumberScreens();
-            refreshAssignments();
-          });
-        }
-
-        renumberScreens();
-        refreshAssignments();
-      }
-
-      addScreenButton.addEventListener('click', addScreen);
-      addScreen();
-
-      const photoInput = document.getElementById('photoFiles');
-      const videoInput = document.getElementById('videoFile');
-      const audioInput = document.getElementById('audioFile');
-
-      photoInput.addEventListener('change', () => {
-        if (photoInput.files.length > 10) {
-          alert('Можна додати не більше 10 фотографій.');
-          photoInput.value = '';
-        }
-
-        document.getElementById('photoCount').textContent = photoInput.files.length
-          ? `Вибрано фото: ${photoInput.files.length} із 10`
-          : 'Файли не вибрано';
-
-        const holder = document.getElementById('photoScreenAssignments');
-        holder.innerHTML = '';
-
-        [...photoInput.files].forEach((file, i) => {
-          const row = document.createElement('label');
-          row.className = 'field assignment-row';
-          row.innerHTML = `
-            <span>${escapeHtml(file.name)}</span>
-            <select class="screen-assignment" name="photoScreen_${i}">
-              <option value="">Ще не визначено</option>
-            </select>
-          `;
-          holder.appendChild(row);
-        });
-
-        refreshAssignments();
-      });
-
-      videoInput.addEventListener('change', () => {
-        if (videoInput.files.length > 1) {
-          alert('Можна додати лише одне відео.');
-          videoInput.value = '';
-        }
-        document.getElementById('videoCount').textContent = videoInput.files.length
-          ? `Вибрано: ${videoInput.files[0].name}`
-          : 'Файл не вибрано';
-      });
-
-      audioInput.addEventListener('change', () => {
-        if (audioInput.files.length > 1) {
-          alert('Можна додати лише один аудіофайл.');
-          audioInput.value = '';
-        }
-        document.getElementById('audioCount').textContent = audioInput.files.length
-          ? `Вибрано: ${audioInput.files[0].name}`
-          : 'Файл не вибрано';
-      });
-
-      function value(name) {
-        const el = form.elements.namedItem(name);
-        return el ? el.value.trim() : '';
-      }
-
-      function checkedValues(name) {
-        return [...form.querySelectorAll(`input[name="${name}"]:checked`)].map(el => el.value);
-      }
-
-      function buildDetails() {
-        const screens = [...screensList.querySelectorAll('.screen-card')].map((card, i) => ({
-          number: i + 1,
-          title: card.querySelector('[name="screenTitle"]').value.trim(),
-          description: card.querySelector('[name="screenDescription"]').value.trim(),
-          text: card.querySelector('[name="screenText"]').value.trim(),
-          buttons: card.querySelector('[name="screenButtons"]').value.trim(),
-          animations: card.querySelector('[name="screenAnimations"]').value.trim()
-        }));
-
-        const photoAssignments = [...document.querySelectorAll('.screen-assignment')].map((el, i) => ({
-          file: photoInput.files[i]?.name || '',
-          screen: el.value || 'Не визначено'
-        }));
-
-        return {
-          occasion: value('occasion'),
-          style: value('style'),
-          colors: checkedValues('colors'),
-          customColors: value('customColors'),
-          designDescription: value('designDescription'),
-          devices: checkedValues('devices'),
-          screens,
-          features: checkedValues('features'),
-          musicLink: value('music'),
-          musicStart: value('musicStart'),
-          musicNotes: value('musicNotes'),
-          animationNotes: value('animationNotes'),
-          videoLink: value('videoLink'),
-          photoAssignments,
-          deadline: value('deadline'),
-          extraWishes: value('extraWishes'),
-          videoFileName: videoInput.files[0]?.name || '',
-          audioFileName: audioInput.files[0]?.name || ''
-        };
-      }
-
-      function formatDetails(d) {
-        const lines = [
-          'ДЕТАЛІ САЙТУ',
-          `Привід: ${d.occasion || 'не вказано'}`,
-          `Стиль: ${d.style || 'не вказано'}`,
-          `Кольори: ${[...d.colors, d.customColors].filter(Boolean).join(', ') || 'не вказано'}`,
-          `Опис дизайну: ${d.designDescription || 'не вказано'}`,
-          `Пристрої: ${d.devices.join(', ') || 'не вказано'}`,
-          `Функції: ${d.features.join(', ') || 'не вказано'}`,
-          `Музика: ${d.musicLink || d.musicNotes || 'не вказано'}`,
-          `Запуск музики: ${d.musicStart || 'не вказано'}`,
-          `Анімації: ${d.animationNotes || 'не вказано'}`
-        ];
-
-        d.screens.forEach(s => {
-          lines.push(
-            '',
-            `ЕКРАН ${s.number}: ${s.title}`,
-            `Опис: ${s.description}`,
-            `Текст: ${s.text || 'не вказано'}`,
-            `Кнопки та дії: ${s.buttons || 'не вказано'}`,
-            `Анімації: ${s.animations || 'не вказано'}`
-          );
-        });
-
-        if (d.photoAssignments.length) {
-          lines.push('', 'ФОТО ТА ЇХНІ ЕКРАНИ',
-            ...d.photoAssignments.map(p => `${p.file} — екран ${p.screen}`));
-        }
-
-        lines.push(
-          `Посилання на відео: ${d.videoLink || 'не вказано'}`,
-          `Відеофайл: ${d.videoFileName || 'не додано'}`,
-          `Аудіофайл: ${d.audioFileName || 'не додано'}`,
-          `Бажаний термін: ${d.deadline || 'не вказано'}`,
-          `Додаткові побажання: ${d.extraWishes || 'не вказано'}`
-        );
-
-        return lines.join('\n');
-      }
-
-      form.addEventListener('submit', async event => {
-        event.preventDefault();
-        status.textContent = '';
-
-        const firstInvalid = [...form.querySelectorAll(':invalid')]
-          .find(el => el.type !== 'checkbox' || el.required);
-
-        if (firstInvalid) {
-          const parentSection = firstInvalid.closest('[data-section]');
-          if (parentSection) {
-            const content = parentSection.querySelector('.section-content');
-            content.hidden = false;
-            parentSection.classList.add('expanded');
-            parentSection.querySelector('.section-heading').setAttribute('aria-expanded', 'true');
-          }
-          firstInvalid.focus({ preventScroll: false });
-          firstInvalid.reportValidity();
-          return;
-        }
-
-        if (!screensList.querySelectorAll('.screen-card').length) {
-          status.textContent = 'Додай хоча б один екран сайту.';
-          return;
-        }
-
-        const details = buildDetails();
-        const data = new FormData();
-
-        data.append('yourName', value('yourName'));
-        data.append('recipientName', value('recipientName'));
-        data.append('date', value('date'));
-        data.append('greeting', formatDetails(details));
-        data.append('music', value('music') || value('musicNotes'));
-        data.append('contact', value('contact'));
-        data.append('tariff', '150 грн');
-        data.append('wishes', value('extraWishes'));
-        data.append('orderDetails', JSON.stringify(details));
-
-        [...photoInput.files].forEach(file => data.append('photos', file, file.name));
-        if (videoInput.files[0]) data.append('videoFile', videoInput.files[0], videoInput.files[0].name);
-        if (audioInput.files[0]) data.append('musicFile', audioInput.files[0], audioInput.files[0].name);
-
-        submitButton.disabled = true;
-        submitButton.textContent = 'Надсилаємо…';
-        status.textContent = 'Надсилаємо замовлення. Не закривай це вікно.';
-
-        try {
-          const response = await fetch(WORKER_URL, { method: 'POST', body: data });
-          if (!response.ok) throw new Error('Не вдалося надіслати замовлення.');
-
-          modal.classList.remove('is-open');
-          modal.setAttribute('aria-hidden', 'true');
-          document.body.classList.remove('modal-open');
-          document.getElementById('successToast').classList.add('show');
-
-          form.reset();
-          screensList.innerHTML = '';
-          screenCount = 0;
-          addScreen();
-
-          document.getElementById('photoScreenAssignments').innerHTML = '';
-          document.getElementById('photoCount').textContent = 'Файли не вибрано';
-          document.getElementById('videoCount').textContent = 'Файл не вибрано';
-          document.getElementById('audioCount').textContent = 'Файл не вибрано';
-
-          setTimeout(() => document.getElementById('successToast').classList.remove('show'), 8000);
-        } catch (error) {
-          status.textContent = 'Не вдалося надіслати замовлення. Перевір інтернет і спробуй ще раз. Якщо проблема повториться, напиши мені напряму.';
-        } finally {
-          submitButton.disabled = false;
-          submitButton.innerHTML = 'Надіслати замовлення <span aria-hidden="true">↗</span>';
-        }
-      });
-    })();
-  </script>
+    <footer class="site-footer">
+      <span>K V I S I T E</span>
+      <p>Створено з увагою до деталей ♡</p>
+    </footer>
+  </main>
 </body>
 </html>
