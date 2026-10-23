@@ -428,7 +428,10 @@
           font: data.get('font'),
           device: data.get('device'),
           idea: data.get('idea'),
-          extraWishes: data.get('extraWishes'),
+          extraWishes: [
+            data.get('extraWishes'),
+            data.get('promoCode') ? 'Промокод: ' + data.get('promoCode') : ''
+          ].filter(Boolean).join('\n'),
           features: data.getAll('features'),
           musicLink: data.get('musicLink'),
           contact: data.get('contact'),
