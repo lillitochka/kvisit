@@ -61,8 +61,12 @@ export default {
       }
 
       const safe = value => {
-        if (Array.isArray(value)) return value.join(", ") || "Не вказано";
-        if (value === null || value === undefined || value === "") return "Не вказано";
+        if (Array.isArray(value)) {
+          return value.join(", ") || "Не вказано";
+        }
+        if (value === null || value === undefined || value === "") {
+          return "Не вказано";
+        }
         return String(value);
       };
 
@@ -90,6 +94,7 @@ export default {
         `Аудіофайл: ${safe(details.musicFile)}`,
         "",
         `Додаткові побажання: ${safe(details.extraWishes)}`,
+        `Промокод: ${safe(details.promoCode)}`,
         "",
         `Контакт: ${safe(details.contact)}`,
         `Вартість: ${safe(form.get("tariff"))}`
