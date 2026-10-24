@@ -422,25 +422,26 @@
         if (!checkTotalSize(currentFiles())) return;
 
         const data = new FormData(form);
-        const details = {
-          forWhom: data.get('forWhom'),
-          recipientName: data.get('recipientName'),
-          nameForms: data.get('nameForms'),
-          occasion: data.get('occasion'),
-          deadline: data.get('deadline'),
-          design: data.get('design'),
-          font: data.get('font'),
-          device: data.get('device'),
-          idea: data.get('idea'),
-          extraWishes: data.get('extraWishes'),
-          promoCode: data.get('promoCode'),
-          features: data.getAll('features'),
-          musicLink: data.get('musicLink'),
-          contact: data.get('contact'),
-          photos: [...photosInput.files].map(file => file.name),
-          video: videoInput.files[0]?.name || '',
-          musicFile: musicInput.files[0]?.name || ''
-        };
+       const details = {
+  forWhom: data.get('forWhom'),
+  recipientName: data.get('recipientName'),
+  nameForms: data.get('nameForms'),
+  occasion: data.get('occasion'),
+  deadline: data.get('deadline'),
+  design: data.get('design'),
+  font: data.get('font'),
+  devices: data.getAll('devices'),
+  operatingSystem: data.get('operatingSystem'),
+  idea: data.get('idea'),
+  extraWishes: data.get('extraWishes'),
+  promoCode: data.get('promoCode'),
+  features: data.getAll('features'),
+  musicLink: data.get('musicLink'),
+  contact: data.get('contact'),
+  photos: [...photosInput.files].map(file => file.name),
+  video: videoInput.files[0]?.name || '',
+  musicFile: musicInput.files[0]?.name || ''
+};
 
         data.append('orderDetails', JSON.stringify(details));
         data.append('tariff', '150 грн');
