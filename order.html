@@ -124,27 +124,28 @@
           </div>
         </fieldset>
 
-        <fieldset class="field">
-          <legend>Для якого пристрою створити сайт?</legend>
-          <div class="device-options">
-            <label class="device-option">
-              <input type="radio" name="device" value="Телефон" checked>
-              <span class="device-icon">📱</span>
-              <strong>Телефон</strong>
-              <small>Вертикальний формат</small>
-            </label>
+<div class="field">
+  <span class="field-title">На якому пристрої переглядатимуть сайт?</span>
+  <div class="choice-row">
+    <label class="choice">
+      <input type="checkbox" name="devices" value="Телефон">
+      <span>📱 Телефон</span>
+    </label>
+    <label class="choice">
+      <input type="checkbox" name="devices" value="Комп’ютер / планшет">
+      <span>💻 Комп’ютер / планшет</span>
+    </label>
+  </div>
+</div>
 
-            <label class="device-option">
-              <input type="radio" name="device" value="Планшет">
-              <span class="device-icon">▱</span>
-              <strong>Планшет</strong>
-              <small>Більший екран</small>
-            </label>
-          </div>
-          <small>Можна обрати лише один варіант</small>
-        </fieldset>
-      </section>
-
+<label class="field">
+  Яка операційна система на телефоні?
+  <select name="operatingSystem" required>
+    <option value="" disabled selected>Обери варіант</option>
+    <option value="Android">Android</option>
+    <option value="iPhone (iOS)">iPhone (iOS)</option>
+  </select>
+</label>
       <section class="form-card">
         <div class="card-heading">
           <span class="card-flower">♡</span>
