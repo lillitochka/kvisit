@@ -1,6 +1,6 @@
 {
   "$schema": "https://json.schemastore.org/wrangler.json",
-  "name": "kvisite-cool",
+  "name": "kvisite-telegram",
   "main": "./index.js",
   "compatibility_date": "2026-09-20"
 }
