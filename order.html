@@ -573,7 +573,7 @@ form.addEventListener("submit", async event => {
   if (video) data.append("videoFile", video, video.name);
 
   try {
-    const response = await fetch(WORKER_URL, {
+    const response = await fetch(WORKER_URL, {https://broken-meadow-078d.k2503212.workers.dev/}
       method: "POST",
       body: data
     });
