@@ -2,338 +2,813 @@
 <!DOCTYPE html>
 <html lang="uk">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Анкета замовлення — KVISITE</title>
-  <link rel="stylesheet" href="style.css">
-  <style>
-    .type-options, .palette {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 10px;
-    }
-    .type-option, .color-choice {
-      border: 1px solid var(--border);
-      border-radius: 9px;
-      background: #fffdfc;
-      padding: 13px;
-      cursor: pointer;
-      color: var(--brown);
-    }
-    .type-option:has(input:checked) {
-      border-color: var(--pink-dark);
-      background: #fff5f7;
-    }
-    .type-option input { accent-color: var(--pink-dark); }
-    .palette { grid-template-columns: repeat(5, 1fr); }
-    .color-choice {
-      aspect-ratio: 1;
-      padding: 4px;
-      border: 2px solid transparent;
-    }
-    .color-choice.selected { border-color: var(--pink-dark); }
-    .color-choice span {
-      display: block;
-      width: 100%;
-      height: 100%;
-      border-radius: 6px;
-    }
-    .photo-item {
-      display: grid;
-      grid-template-columns: 68px 1fr auto;
-      gap: 10px;
-      align-items: center;
-      padding: 10px 0;
-      border-bottom: 1px solid var(--border);
-    }
-    .photo-item img {
-      width: 68px;
-      height: 68px;
-      object-fit: cover;
-      border-radius: 8px;
-    }
-    .photo-item input { min-width: 0; }
-    .remove-photo {
-      border: 0;
-      background: transparent;
-      color: var(--pink-dark);
-      font-size: 20px;
-    }
-    .upload-button {
-      display: block;
-      padding: 16px;
-      border: 1px dashed #d9b8c4;
-      border-radius: 9px;
-      text-align: center;
-      color: var(--pink-dark);
-      background: #fff9fa;
-      cursor: pointer;
-    }
-    .upload-button input { display: none; }
-    .hint {
-      color: var(--muted);
-      font-size: 12px;
-    }
-    .palette-count { color: var(--muted); font-size: 12px; }
-    @media(max-width:420px) {
-      .photo-item { grid-template-columns: 55px 1fr auto; }
-      .photo-item img { width: 55px; height: 55px; }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Замовлення — KVISITE</title>
+<link rel="stylesheet" href="style.css">
+
+<style>
+/* Нова анкета KVISITE */
+
+.order-wrap { max-width: 760px; }
+
+.order-header { margin-bottom: 35px; }
+
+.form-card {
+  padding: clamp(18px, 4vw, 30px);
+  border-radius: 13px;
+}
+
+.card-heading { margin-bottom: 22px; }
+
+.card-heading h2 { font-size: 23px; }
+
+.field textarea { min-height: 145px; }
+
+.field small { line-height: 1.6; }
+
+.type-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.type-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 18px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #fffdfc;
+  cursor: pointer;
+}
+
+.type-card:has(input:checked) {
+  border-color: var(--pink-dark);
+  background: #fff5f7;
+}
+
+.type-card input { accent-color: var(--pink-dark); }
+
+.type-card strong { font-size: 14px; }
+
+.type-card small { color: var(--muted); }
+
+.color-editor {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 17px;
+  padding: 20px 10px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: #fffafa;
+}
+
+.color-picker {
+  position: relative;
+  width: min(100%, 290px);
+  aspect-ratio: 1;
+  touch-action: none;
+}
+
+#colorWheel {
+  display: block;
+  width: 100%;
+  height: 100%;
+  cursor: crosshair;
+}
+
+.color-marker {
+  position: absolute;
+  width: 19px;
+  height: 19px;
+  border: 3px solid white;
+  border-radius: 50%;
+  box-shadow: 0 1px 5px #0006;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.sv-area {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 54%;
+  height: 54%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  overflow: hidden;
+  cursor: crosshair;
+  touch-action: none;
+}
+
+.sv-color {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(to top, #000, transparent),
+    linear-gradient(to right, #fff, hsl(0,100%,50%));
+}
+
+.sv-marker {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border: 2px solid white;
+  border-radius: 50%;
+  box-shadow: 0 1px 5px #0008;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.color-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  width: 100%;
+}
+
+.current-color {
+  width: 43px;
+  height: 43px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  background: #e7b8c7;
+}
+
+.hex-input {
+  width: 115px !important;
+  min-height: 43px !important;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.add-color {
+  min-height: 43px;
+  padding: 10px 18px;
+  border: 0;
+  border-radius: 8px;
+  color: white;
+  background: #bd8d9e;
+  font-weight: 600;
+}
+
+.add-color:hover { background: #a97689; }
+
+.color-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  min-height: 45px;
+  width: 100%;
+}
+
+.saved-color {
+  position: relative;
+  width: 43px;
+  height: 43px;
+  border: 1px solid #e5d8dc;
+  border-radius: 9px;
+  cursor: pointer;
+}
+
+.saved-color button {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  width: 19px;
+  height: 19px;
+  padding: 0;
+  border: 1px solid white;
+  border-radius: 50%;
+  color: white;
+  background: #b77e91;
+  font-size: 13px;
+  line-height: 17px;
+}
+
+.empty-colors {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.photo-add {
+  display: block;
+  padding: 18px;
+  border: 1px dashed #d9b8c4;
+  border-radius: 10px;
+  color: var(--pink-dark);
+  background: #fff9fa;
+  text-align: center;
+  cursor: pointer;
+}
+
+.photo-add input { display: none; }
+
+.photo-item {
+  display: grid;
+  grid-template-columns: 68px minmax(0,1fr) 30px;
+  gap: 11px;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.photo-item img {
+  width: 68px;
+  height: 68px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.photo-item small {
+  display: block;
+  margin-bottom: 5px;
+  overflow-wrap: anywhere;
+  color: var(--brown-soft);
+}
+
+.photo-comment {
+  min-height: 40px !important;
+  padding: 8px 10px !important;
+  font-size: 12px !important;
+}
+
+.remove-file {
+  border: 0;
+  color: var(--pink-dark);
+  background: transparent;
+  font-size: 22px;
+}
+
+.material-note {
+  padding: 14px;
+  border-radius: 9px;
+  color: var(--brown-soft);
+  background: #fff7f9;
+  font-size: 12px;
+}
+
+.check-list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 9px;
+}
+
+.check-option {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.check-option:has(input:checked) {
+  border-color: var(--pink-dark);
+  background: #fff5f7;
+}
+
+.check-option input { accent-color: var(--pink-dark); }
+
+@media(max-width: 480px) {
+  .type-grid, .check-list { grid-template-columns: 1fr; }
+  .photo-item { grid-template-columns: 55px minmax(0,1fr) 25px; }
+  .photo-item img { width: 55px; height: 55px; }
+}
+</style>
 </head>
 
 <body class="order-page">
+
 <main class="order-wrap">
 
-  <a class="back-link" href="index.html">← На головну</a>
+<a href="index.html" class="back-link">← На головну</a>
 
-  <header class="order-header">
-    <div class="mini-wordmark">K V I S I T E</div>
-    <p class="eyebrow">YOUR IDEA · OUR DESIGN</p>
-    <h1>Створімо ваш сайт ♡</h1>
-    <p>Розкажіть про свою задумку, додайте приклади та матеріали. Чим більше деталей — тим краще ми зрозуміємо, що ви хочете отримати.</p>
-  </header>
+<header class="order-header">
+  <div class="mini-wordmark">K V I S I T E</div>
+  <p class="eyebrow">YOUR IDEA · OUR DESIGN</p>
+  <h1>Створімо ваш сайт ♡</h1>
+  <p>
+    Розкажіть про свою задумку, додайте фотографії,
+    приклади та матеріали. Ми уважно ознайомимося
+    з вашими побажаннями.
+  </p>
+</header>
 
-  <form id="orderForm">
+<form id="orderForm">
 
-    <section class="form-card">
-      <div class="card-heading">
-        <div class="card-flower">♡</div>
-        <div>
-          <h2>01. Який сайт вам потрібен?</h2>
-          <p>Оберіть тип майбутнього сайту.</p>
-        </div>
+<!-- 01. Тип сайту -->
+<section class="form-card">
+  <div class="card-heading">
+    <div class="card-flower">01</div>
+    <div>
+      <h2>Який сайт вам потрібен?</h2>
+      <p>Оберіть тип майбутнього сайту.</p>
+    </div>
+  </div>
+
+  <div class="type-grid">
+    <label class="type-card">
+      <input type="radio" name="siteType"
+        value="Сайт-привітання" checked>
+      <strong>♡ Сайт-привітання</strong>
+      <small>150 грн</small>
+    </label>
+
+    <label class="type-card">
+      <input type="radio" name="siteType"
+        value="Особистий сайт">
+      <strong>Особистий сайт</strong>
+      <small>Вартість узгоджується</small>
+    </label>
+  </div>
+</section>
+
+<!-- 02. Опис -->
+<section class="form-card">
+  <div class="card-heading">
+    <div class="card-flower">02</div>
+    <div>
+      <h2>Ваша задумка</h2>
+      <p>Розкажіть, яким має бути ваш сайт.</p>
+    </div>
+  </div>
+
+  <label class="field">
+    <span>Опишіть свою ідею</span>
+    <textarea name="idea" rows="8"
+      placeholder="Наприклад: хочу ніжний рожевий сайт із бантиками. На початку має бути красиве привітання, нижче — фотографії, музика та кнопка з листом..."></textarea>
+    <small>
+      Можете описати стиль, розділи, написи, кнопки,
+      анімації, ефекти та будь-які інші деталі.
+    </small>
+  </label>
+</section>
+
+<!-- 03. Цветовой редактор -->
+<section class="form-card">
+  <div class="card-heading">
+    <div class="card-flower">03</div>
+    <div>
+      <h2>Кольори сайту</h2>
+      <p>Створіть власну палітру кольорів.</p>
+    </div>
+  </div>
+
+  <p class="hint">
+    Оберіть відтінок на кольоровому колі,
+    насиченість і яскравість усередині.
+    Потім натисніть «＋», щоб зберегти колір.
+  </p>
+
+  <div class="color-editor">
+    <div class="color-picker" id="colorPicker">
+      <canvas id="colorWheel" width="290" height="290"></canvas>
+      <div class="color-marker" id="wheelMarker"></div>
+
+      <div class="sv-area" id="svArea">
+        <div class="sv-color" id="svColor"></div>
+        <div class="sv-marker" id="svMarker"></div>
       </div>
+    </div>
 
-      <fieldset class="field">
-        <div class="type-options">
-          <label class="type-option">
-            <input type="radio" name="siteType" value="Сайт-привітання" checked>
-            <strong>♡ Сайт-привітання</strong>
-            <small>100 грн</small>
-          </label>
-          <label class="type-option">
-            <input type="radio" name="siteType" value="Особистий сайт">
-            <strong>Особистий сайт</strong>
-            <small>150 грн</small>
-          </label>
-        </div>
-        <p class="hint">Інтернет-магазини поки не приймаємо в роботу.</p>
-      </fieldset>
-    </section>
-
-    <section class="form-card">
-      <div class="card-heading">
-        <div class="card-flower">02</div>
-        <div>
-          <h2>Ваша задумка</h2>
-          <p>Головна частина анкети — опишіть усе, що уявляєте.</p>
-        </div>
-      </div>
-
-      <label class="field">
-        <span>Яким ви бачите свій сайт?</span>
-        <textarea name="idea" rows="9"
-          placeholder="Наприклад: хочу ніжний рожевий сайт із бантиками. На першому екрані має бути привітання, нижче — фотографії, музика та кнопка з листом..."></textarea>
-        <small>Можете описати стиль, розділи, написи, кнопки, анімації та будь-які дрібниці. Обсяг тексту не обмежуємо.</small>
-      </label>
-    </section>
-
-    <section class="form-card">
-      <div class="card-heading">
-        <div class="card-flower">03</div>
-        <div>
-          <h2>Кольори сайту</h2>
-          <p>Оберіть усі кольори, які вам подобаються.</p>
-        </div>
-      </div>
-
-      <div class="palette" id="palette"></div>
-      <p class="palette-count" id="paletteCount">Обрано: 0 кольорів</p>
-    </section>
-
-    <section class="form-card">
-      <div class="card-heading">
-        <div class="card-flower">04</div>
-        <div>
-          <h2>Фотографії та приклади</h2>
-          <p>Додавайте зображення, які допоможуть нам зрозуміти вашу ідею.</p>
-        </div>
-      </div>
-
-      <div class="upload-block">
-        <label class="upload-button">
-          <strong>＋ Додати фотографії</strong>
-          <br>
-          <small>Можна вибрати декілька файлів одразу</small>
-          <input id="photosInput" type="file" accept="image/*" multiple>
-        </label>
-
-        <div id="photoList"></div>
-        <p class="file-info" id="photoInfo">Поки немає доданих фотографій.</p>
-      </div>
-
-      <label class="field" style="margin-top:20px">
-        <span>Загальні пояснення до фотографій</span>
-        <textarea name="photoNotes" rows="4"
-          placeholder="Наприклад: перші три фото — приклади оформлення, а персонажа з останнього хочу додати на головний екран."></textarea>
-        <small>Не обов'язково пояснювати кожне фото окремо.</small>
-      </label>
-    </section>
-
-    <section class="form-card">
-      <div class="card-heading">
-        <div class="card-flower">05</div>
-        <div>
-          <h2>Додаткові матеріали</h2>
-          <p>Музика, відео, посилання та інші файли.</p>
-        </div>
-      </div>
-
-      <label class="field">
-        <span>Музика</span>
-        <input type="file" name="musicFile" accept="audio/*">
-        <small>Або вставте посилання на музику в поле нижче.</small>
-      </label>
-
-      <label class="field">
-        <span>Посилання на музику (якщо є)</span>
-        <input type="url" name="musicLink" placeholder="https://...">
-      </label>
-
-      <label class="field">
-        <span>Відео</span>
-        <input type="file" name="videoFile" accept="video/*">
-      </label>
-
-      <label class="field">
-        <span>Інші посилання або матеріали</span>
-        <textarea name="otherMaterials" rows="3"
-          placeholder="Вставте посилання або поясніть, які ще матеріали маєте."></textarea>
-      </label>
-    </section>
-
-    <section class="form-card">
-      <div class="card-heading">
-        <div class="card-flower">06</div>
-        <div>
-          <h2>Додаткові побажання</h2>
-          <p>Усе, що ще важливо врахувати.</p>
-        </div>
-      </div>
-
-      <label class="field">
-        <span>Ваші побажання</span>
-        <textarea name="extraWishes" rows="4"
-          placeholder="Можливо, є ще якісь деталі, про які ми не запитали?"></textarea>
-      </label>
-
-      <label class="field">
-        <span>Бажаний термін виконання</span>
-        <input type="date" name="deadline" id="deadline">
-      </label>
-    </section>
-
-    <section class="form-card">
-      <div class="card-heading">
-        <div class="card-flower">07</div>
-        <div>
-          <h2>Контактні дані</h2>
-          <p>Як ми зможемо з вами зв'язатися?</p>
-        </div>
-      </div>
-
-      <label class="field">
-        <span>Ваше ім'я</span>
-        <input type="text" name="recipientName" required placeholder="Як до вас звертатися?">
-      </label>
-
-      <label class="field">
-        <span>Telegram або Instagram</span>
-        <input type="text" name="contact" required placeholder="@username або посилання">
-      </label>
-    </section>
-
-    <section class="form-card">
-      <div class="price-note">
-        <span>Вартість обраного сайту</span>
-        <strong id="price">100 грн</strong>
-        <p>Остаточні деталі замовлення узгодимо під час спілкування.</p>
-      </div>
-
-      <button class="button button-primary submit-button" id="submitButton" type="submit">
-        Надіслати анкету ♡
+    <div class="color-controls">
+      <div class="current-color" id="currentColor"></div>
+      <input class="hex-input" id="hexInput"
+        value="#E7B8C7" maxlength="7" aria-label="HEX колір">
+      <button type="button" class="add-color" id="addColor">
+        ＋ Додати
       </button>
-      <p class="submit-note">Перевірте свої відповіді перед відправленням.</p>
-      <p class="form-status" id="formStatus" role="status"></p>
-    </section>
+    </div>
+  </div>
 
-  </form>
+  <div style="margin-top:20px">
+    <strong style="font-size:13px">Ваша палітра</strong>
+    <p class="hint">Натисніть ×, щоб видалити колір.</p>
+    <div class="color-list" id="colorList">
+      <span class="empty-colors">Ви ще не додали кольори.</span>
+    </div>
+  </div>
+</section>
+
+<!-- 04. Фото -->
+<section class="form-card">
+  <div class="card-heading">
+    <div class="card-flower">04</div>
+    <div>
+      <h2>Фотографії та приклади</h2>
+      <p>Додайте все, що допоможе зрозуміти вашу ідею.</p>
+    </div>
+  </div>
+
+  <div class="material-note">
+    Це можуть бути фотографії для сайту, приклади дизайну,
+    персонажі, декор, фони, кнопки або будь-які інші зображення.
+    Додавайте кілька файлів за раз або поступово.
+  </div>
+
+  <div class="upload-block">
+    <label class="photo-add">
+      <strong>＋ Додати фотографії</strong>
+      <br>
+      <small>Виберіть одне або декілька зображень</small>
+      <input type="file" id="photosInput" accept="image/*" multiple>
+    </label>
+
+    <div id="photoList"></div>
+    <p class="file-info" id="photoInfo">
+      Фотографії ще не додані.
+    </p>
+  </div>
+
+  <label class="field" style="margin-top:22px">
+    <span>Загальні пояснення до фотографій</span>
+    <textarea name="photoNotes" rows="4"
+      placeholder="Наприклад: перші три фото — приклади оформлення, а персонажа з останнього хочу додати на головний екран."></textarea>
+    <small>
+      Не обов'язково пояснювати кожне фото окремо.
+      Тут можна описати всі матеріали разом.
+    </small>
+  </label>
+</section>
+
+<!-- 05. Материалы -->
+<section class="form-card">
+  <div class="card-heading">
+    <div class="card-flower">05</div>
+    <div>
+      <h2>Музика, відео та посилання</h2>
+      <p>Додайте інші матеріали, якщо вони потрібні.</p>
+    </div>
+  </div>
+
+  <label class="field">
+    <span>Музика</span>
+    <input type="file" name="musicFile" accept="audio/*">
+  </label>
+
+  <label class="field">
+    <span>Посилання на музику</span>
+    <input type="url" name="musicLink"
+      placeholder="https://...">
+  </label>
+
+  <label class="field">
+    <span>Відео</span>
+    <input type="file" name="videoFile" accept="video/*">
+  </label>
+
+  <label class="field">
+    <span>Інші посилання та матеріали</span>
+    <textarea name="otherMaterials" rows="3"
+      placeholder="Вставте посилання або розкажіть про інші матеріали."></textarea>
+  </label>
+</section>
+
+<!-- 06. Пожелания -->
+<section class="form-card">
+  <div class="card-heading">
+    <div class="card-flower">06</div>
+    <div>
+      <h2>Додаткові побажання</h2>
+      <p>Усе, що ще важливо врахувати.</p>
+    </div>
+  </div>
+
+  <label class="field">
+    <span>Ваші побажання</span>
+    <textarea name="extraWishes" rows="4"
+      placeholder="Можливо, є ще якісь деталі, про які ми не запитали?"></textarea>
+  </label>
+
+  <label class="field">
+    <span>Бажаний термін виконання</span>
+    <input type="date" name="deadline" id="deadline">
+  </label>
+</section>
+
+<!-- 07. Контакты -->
+<section class="form-card">
+  <div class="card-heading">
+    <div class="card-flower">07</div>
+    <div>
+      <h2>Контактні дані</h2>
+      <p>Залиште спосіб зв'язку з вами.</p>
+    </div>
+  </div>
+
+  <label class="field">
+    <span>Ваше ім'я</span>
+    <input type="text" name="recipientName"
+      placeholder="Як до вас звертатися?" required>
+  </label>
+
+  <label class="field">
+    <span>Telegram або Instagram</span>
+    <input type="text" name="contact"
+      placeholder="@username або посилання" required>
+  </label>
+</section>
+
+<!-- Отправка -->
+<section class="form-card">
+  <div class="price-note">
+    <span>Вартість сайту-привітання</span>
+    <strong>150 грн</strong>
+    <p>
+      Якщо ваш проєкт складніший або має багато деталей,
+      вартість можна буде обговорити окремо.
+    </p>
+  </div>
+
+  <button class="button button-primary submit-button"
+    id="submitButton" type="submit">
+    Надіслати анкету ♡
+  </button>
+
+  <p class="submit-note">
+    Перед відправленням перевірте свої відповіді.
+  </p>
+  <p class="form-status" id="formStatus" role="status"></p>
+</section>
+
+</form>
 </main>
 
 <div class="success-toast" id="successToast" hidden>
   <div class="success-mark">♡</div>
   <h2>Дякуємо за замовлення!</h2>
-  <p>Анкету надіслано. Ми зв'яжемося з вами для обговорення деталей.</p>
-  <a class="button button-primary" href="index.html">На головну</a>
+  <p>Вашу анкету надіслано. Ми зв'яжемося з вами для обговорення деталей.</p>
+  <a href="index.html" class="button button-primary">На головну</a>
 </div>
 
 <script>
-const WORKER_URL = "https://kvisite-api.k2503212.workers.dev/";
+/* --------------------------------
+   Налаштування
+-------------------------------- */
+
+const WORKER_URL =
+  "https://kvisite-api.k2503212.workers.dev/";
+
 const MAX_TOTAL_SIZE = 70 * 1024 * 1024;
 
 const form = document.getElementById("orderForm");
+const statusBox = document.getElementById("formStatus");
+const submitButton = document.getElementById("submitButton");
+
+/* --------------------------------
+   КОЛЬОРОВИЙ РЕДАКТОР
+-------------------------------- */
+
+const canvas = document.getElementById("colorWheel");
+const ctx = canvas.getContext("2d");
+
+const picker = document.getElementById("colorPicker");
+const wheelMarker = document.getElementById("wheelMarker");
+const svArea = document.getElementById("svArea");
+const svColor = document.getElementById("svColor");
+const svMarker = document.getElementById("svMarker");
+
+const currentColor = document.getElementById("currentColor");
+const hexInput = document.getElementById("hexInput");
+const colorList = document.getElementById("colorList");
+
+let hue = 330;
+let saturation = 0.35;
+let brightness = 0.91;
+
+let chosenColors = [];
+
+const wheelSize = 290;
+const wheelCenter = wheelSize / 2;
+const outerRadius = 139;
+const innerRadius = 112;
+
+function drawWheel() {
+  const image = ctx.createImageData(wheelSize, wheelSize);
+
+  for (let y = 0; y < wheelSize; y++) {
+    for (let x = 0; x < wheelSize; x++) {
+      const dx = x - wheelCenter;
+      const dy = y - wheelCenter;
+      const distance = Math.sqrt(dx * dx + dy * dy);
+
+      if (distance >= innerRadius && distance <= outerRadius) {
+        let angle = Math.atan2(dy, dx) * 180 / Math.PI;
+        let h = (angle + 360 + 90) % 360;
+
+        const rgb = hsvToRgb(h, 1, 1);
+        const index = (y * wheelSize + x) * 4;
+
+        image.data[index] = rgb.r;
+        image.data[index + 1] = rgb.g;
+        image.data[index + 2] = rgb.b;
+        image.data[index + 3] = 255;
+      }
+    }
+  }
+
+  ctx.putImageData(image, 0, 0);
+}
+
+function hsvToRgb(h, s, v) {
+  const c = v * s;
+  const x = c * (1 - Math.abs((h / 60) % 2 - 1));
+  const m = v - c;
+
+  let r = 0, g = 0, b = 0;
+
+  if (h < 60) [r,g,b] = [c,x,0];
+  else if (h < 120) [r,g,b] = [x,c,0];
+  else if (h < 180) [r,g,b] = [0,c,x];
+  else if (h < 240) [r,g,b] = [0,x,c];
+  else if (h < 300) [r,g,b] = [x,0,c];
+  else [r,g,b] = [c,0,x];
+
+  return {
+    r: Math.round((r + m) * 255),
+    g: Math.round((g + m) * 255),
+    b: Math.round((b + m) * 255)
+  };
+}
+
+function rgbToHex(rgb) {
+  return "#" + [rgb.r, rgb.g, rgb.b]
+    .map(v => v.toString(16).padStart(2, "0"))
+    .join("")
+    .toUpperCase();
+}
+
+function currentHex() {
+  return rgbToHex(hsvToRgb(hue, saturation, brightness));
+}
+
+function updatePicker() {
+  const angle = (hue - 90) * Math.PI / 180;
+  const radius = (innerRadius + outerRadius) / 2;
+
+  const markerX = wheelCenter + Math.cos(angle) * radius;
+  const markerY = wheelCenter + Math.sin(angle) * radius;
+
+  wheelMarker.style.left = markerX / wheelSize * 100 + "%";
+  wheelMarker.style.top = markerY / wheelSize * 100 + "%";
+
+  svColor.style.background =
+    `linear-gradient(to top, black, transparent),
+     linear-gradient(to right, white, hsl(${hue},100%,50%))`;
+
+  svMarker.style.left = saturation * 100 + "%";
+  svMarker.style.top = (1 - brightness) * 100 + "%";
+
+  const hex = currentHex();
+  currentColor.style.background = hex;
+  hexInput.value = hex;
+}
+
+function selectHue(event) {
+  const rect = canvas.getBoundingClientRect();
+
+  const x = (event.clientX - rect.left) *
+    wheelSize / rect.width;
+
+  const y = (event.clientY - rect.top) *
+    wheelSize / rect.height;
+
+  const dx = x - wheelCenter;
+  const dy = y - wheelCenter;
+  const distance = Math.sqrt(dx * dx + dy * dy);
+
+  if (distance < innerRadius - 5 || distance > outerRadius + 5) {
+    return;
+  }
+
+  let angle = Math.atan2(dy, dx) * 180 / Math.PI;
+  hue = (angle + 360 + 90) % 360;
+
+  updatePicker();
+}
+
+function selectSV(event) {
+  const rect = svArea.getBoundingClientRect();
+
+  saturation = Math.max(0, Math.min(
+    1, (event.clientX - rect.left) / rect.width
+  ));
+
+  brightness = 1 - Math.max(0, Math.min(
+    1, (event.clientY - rect.top) / rect.height
+  ));
+
+  updatePicker();
+}
+
+canvas.addEventListener("pointerdown", event => {
+  canvas.setPointerCapture(event.pointerId);
+  selectHue(event);
+});
+
+canvas.addEventListener("pointermove", event => {
+  if (event.buttons) selectHue(event);
+});
+
+svArea.addEventListener("pointerdown", event => {
+  svArea.setPointerCapture(event.pointerId);
+  selectSV(event);
+});
+
+svArea.addEventListener("pointermove", event => {
+  if (event.buttons) selectSV(event);
+});
+
+hexInput.addEventListener("change", () => {
+  const value = hexInput.value.trim();
+
+  if (!/^#[0-9a-fA-F]{6}$/.test(value)) {
+    updatePicker();
+    return;
+  }
+
+  const r = parseInt(value.slice(1,3), 16) / 255;
+  const g = parseInt(value.slice(3,5), 16) / 255;
+  const b = parseInt(value.slice(5,7), 16) / 255;
+
+  const max = Math.max(r,g,b);
+  const min = Math.min(r,g,b);
+  const delta = max - min;
+
+  brightness = max;
+  saturation = max === 0 ? 0 : delta / max;
+
+  if (delta === 0) hue = 0;
+  else if (max === r) hue = 60 * (((g-b)/delta) % 6);
+  else if (max === g) hue = 60 * ((b-r)/delta + 2);
+  else hue = 60 * ((r-g)/delta + 4);
+
+  hue = (hue + 360) % 360;
+
+  updatePicker();
+});
+
+document.getElementById("addColor").addEventListener("click", () => {
+  const hex = currentHex();
+
+  if (chosenColors.includes(hex)) return;
+
+  chosenColors.push(hex);
+  renderColors();
+});
+
+function renderColors() {
+  colorList.innerHTML = "";
+
+  if (!chosenColors.length) {
+    colorList.innerHTML =
+      '<span class="empty-colors">Ви ще не додали кольори.</span>';
+    return;
+  }
+
+  chosenColors.forEach((color, index) => {
+    const item = document.createElement("div");
+    item.className = "saved-color";
+    item.style.background = color;
+    item.title = color;
+
+    const remove = document.createElement("button");
+    remove.type = "button";
+    remove.textContent = "×";
+    remove.setAttribute("aria-label", "Видалити " + color);
+
+    remove.addEventListener("click", () => {
+      chosenColors.splice(index, 1);
+      renderColors();
+    });
+
+    item.appendChild(remove);
+    colorList.appendChild(item);
+  });
+}
+
+drawWheel();
+updatePicker();
+
+/* --------------------------------
+   ФОТОГРАФИИ
+-------------------------------- */
+
 const photosInput = document.getElementById("photosInput");
 const photoList = document.getElementById("photoList");
 const photoInfo = document.getElementById("photoInfo");
-const formStatus = document.getElementById("formStatus");
-const submitButton = document.getElementById("submitButton");
 
 let photos = [];
-let selectedColors = [];
 
-const colors = [
-  "#f5c6d5","#e7a9bd","#d985a4","#bd7890","#9b536f",
-  "#fff0df","#f3dfc8","#d9b99b","#b88e78","#80675b",
-  "#fff9e9","#f4e9b9","#e5d28a","#c8b66d","#a39152",
-  "#e3d9f4","#c9b8e8","#a995d1","#8574ae","#65547f",
-  "#d8ebdf","#b6d5c2","#8fb69f","#67917b","#466c59",
-  "#dcecf5","#a9cde0","#78a9c6","#5686a7","#355e7c"
-];
-
-const palette = document.getElementById("palette");
-
-colors.forEach(color => {
-  const button = document.createElement("button");
-  button.type = "button";
-  button.className = "color-choice";
-  button.setAttribute("aria-label", color);
-  button.innerHTML = `<span style="background:${color}"></span>`;
-
-  button.addEventListener("click", () => {
-    if (selectedColors.includes(color)) {
-      selectedColors = selectedColors.filter(c => c !== color);
-      button.classList.remove("selected");
-    } else {
-      selectedColors.push(color);
-      button.classList.add("selected");
-    }
-
-    document.getElementById("paletteCount").textContent =
-      `Обрано: ${selectedColors.length} кольорів`;
-  });
-
-  palette.appendChild(button);
-});
-
-document.querySelectorAll('input[name="siteType"]').forEach(input => {
-  input.addEventListener("change", () => {
-    document.getElementById("price").textContent =
-      input.value === "Сайт-привітання" ? "100 грн" : "150 грн";
-  });
-});
-
-function totalFileSize() {
+function getTotalSize() {
   const music = form.elements.musicFile.files[0];
   const video = form.elements.videoFile.files[0];
 
@@ -351,18 +826,19 @@ function renderPhotos() {
 
     const image = document.createElement("img");
     image.src = item.preview;
-    image.alt = "Попередній перегляд фотографії";
+    image.alt = "Попередній перегляд";
 
     const details = document.createElement("div");
 
     const filename = document.createElement("small");
     filename.textContent = item.file.name;
-    filename.style.display = "block";
 
     const comment = document.createElement("input");
+    comment.className = "photo-comment";
     comment.type = "text";
     comment.placeholder = "Коментар до фото (необов'язково)";
     comment.value = item.comment;
+
     comment.addEventListener("input", () => {
       item.comment = comment.value;
     });
@@ -370,10 +846,10 @@ function renderPhotos() {
     details.append(filename, comment);
 
     const remove = document.createElement("button");
+    remove.className = "remove-file";
     remove.type = "button";
-    remove.className = "remove-photo";
     remove.textContent = "×";
-    remove.setAttribute("aria-label", "Видалити фотографію");
+    remove.setAttribute("aria-label", "Видалити фото");
 
     remove.addEventListener("click", () => {
       URL.revokeObjectURL(item.preview);
@@ -386,17 +862,15 @@ function renderPhotos() {
   });
 
   photoInfo.textContent = photos.length
-    ? `Додано фотографій: ${photos.length}. Загальний розмір файлів: ${(totalFileSize() / 1024 / 1024).toFixed(1)} МБ.`
-    : "Поки немає доданих фотографій.";
+    ? `Додано: ${photos.length} фото. Загальний розмір: ${(getTotalSize()/1024/1024).toFixed(1)} МБ.`
+    : "Фотографії ще не додані.";
 }
 
 photosInput.addEventListener("change", () => {
-  const newFiles = Array.from(photosInput.files);
-
-  for (const file of newFiles) {
+  for (const file of Array.from(photosInput.files)) {
     if (!file.type.startsWith("image/")) continue;
 
-    if (totalFileSize() + file.size > MAX_TOTAL_SIZE) {
+    if (getTotalSize() + file.size > MAX_TOTAL_SIZE) {
       alert("Загальний розмір файлів не може перевищувати 70 МБ.");
       break;
     }
@@ -412,51 +886,57 @@ photosInput.addEventListener("change", () => {
   renderPhotos();
 });
 
+/* --------------------------------
+   ДАТА
+-------------------------------- */
+
+const deadline = document.getElementById("deadline");
+deadline.min = new Date().toISOString().split("T")[0];
+
+/* --------------------------------
+   ОТПРАВКА АНКЕТЫ
+-------------------------------- */
+
 form.addEventListener("submit", async event => {
   event.preventDefault();
-  formStatus.textContent = "";
+  statusBox.textContent = "";
 
-  if (totalFileSize() > MAX_TOTAL_SIZE) {
-    formStatus.textContent = "Загальний розмір файлів перевищує 70 МБ.";
+  if (getTotalSize() > MAX_TOTAL_SIZE) {
+    statusBox.textContent =
+      "Загальний розмір файлів перевищує 70 МБ.";
     return;
   }
 
   submitButton.disabled = true;
   submitButton.textContent = "Надсилаємо...";
 
-  const data = new FormData();
-
   const siteType = form.elements.siteType.value;
-  const tariff = siteType === "Сайт-привітання" ? "100 грн" : "150 грн";
 
   const details = {
-    forWhom: "",
-    recipientName: form.elements.recipientName.value,
-    nameForms: "",
-    occasion: "",
-    deadline: form.elements.deadline.value,
-    design: "",
-    font: "",
-    devices: [],
-    operatingSystem: "",
-    idea: form.elements.idea.value,
-    extraWishes: form.elements.extraWishes.value,
-    promoCode: "",
-    features: [],
-    musicLink: form.elements.musicLink.value,
-    contact: form.elements.contact.value,
     siteType,
-    selectedColors,
+    tariff: "150 грн",
+    recipientName: form.elements.recipientName.value,
+    contact: form.elements.contact.value,
+    deadline: form.elements.deadline.value,
+
+    idea: form.elements.idea.value,
+    selectedColors: chosenColors,
+
     photoNotes: form.elements.photoNotes.value,
     photoComments: photos.map(item => ({
       filename: item.file.name,
       comment: item.comment
     })),
-    otherMaterials: form.elements.otherMaterials.value
+
+    musicLink: form.elements.musicLink.value,
+    otherMaterials: form.elements.otherMaterials.value,
+    extraWishes: form.elements.extraWishes.value
   };
 
+  const data = new FormData();
+
   data.append("orderDetails", JSON.stringify(details));
-  data.append("tariff", tariff);
+  data.append("tariff", "150 грн");
 
   photos.forEach(item => {
     data.append("photos", item.file, item.file.name);
@@ -477,20 +957,21 @@ form.addEventListener("submit", async event => {
     const result = await response.json();
 
     if (!response.ok || !result.ok) {
-      throw new Error(result.error || "Не вдалося надіслати анкету.");
+      throw new Error(result.error || "Помилка відправлення.");
     }
 
     document.getElementById("successToast").hidden = false;
     window.scrollTo({ top: 0, behavior: "smooth" });
 
   } catch (error) {
-    formStatus.textContent =
-      error.message || "Помилка відправлення. Спробуйте ще раз.";
+    statusBox.textContent =
+      error.message || "Не вдалося надіслати анкету. Спробуйте ще раз.";
   } finally {
     submitButton.disabled = false;
     submitButton.textContent = "Надіслати анкету ♡";
   }
 });
 </script>
+
 </body>
 </html>
