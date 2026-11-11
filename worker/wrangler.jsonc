@@ -1,6 +1,6 @@
 {
   "$schema": "https://json.schemastore.org/wrangler.json",
-  "name": "broken-meadow",
+  "name": "kvisite-cool",
   "main": "./index.js",
   "compatibility_date": "2026-09-20"
 }
