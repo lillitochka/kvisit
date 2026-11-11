@@ -51,6 +51,7 @@ export default {
       }
 
       let details;
+
       try {
         details = JSON.parse(rawDetails);
       } catch {
@@ -62,42 +63,86 @@ export default {
 
       const safe = value => {
         if (Array.isArray(value)) {
-          return value.join(", ") || "Не вказано";
+          return value.length
+            ? value.map(safe).join(", ")
+            : "Не вказано";
         }
+
         if (value === null || value === undefined || value === "") {
           return "Не вказано";
         }
+
+        if (typeof value === "object") {
+          return JSON.stringify(value);
+        }
+
         return String(value);
       };
+
+      const photos = form.getAll("photos")
+        .filter(file => file instanceof File && file.size > 0);
+
+      const video = form.get("videoFile");
+      const audio = form.get("musicFile");
+
+      const photoComments = Array.isArray(details.photoComments)
+        ? details.photoComments
+        : [];
+
+      const photoDescriptions = photoComments.length
+        ? photoComments.map((item, index) =>
+            `${index + 1}. ${safe(item.filename)} — ${safe(item.comment)}`
+          ).join("\n")
+        : "Коментарів до фотографій немає.";
+
+      const tariff = safe(
+        details.tariff || form.get("tariff")
+      );
 
       const message = [
         "🎀 НОВЕ ЗАМОВЛЕННЯ KVISITE",
         "",
-        `Для кого сайт: ${safe(details.forWhom)}`,
-        `Ім’я отримувача: ${safe(details.recipientName)}`,
-        `Форми імені: ${safe(details.nameForms)}`,
-        `Привід: ${safe(details.occasion)}`,
-        `Потрібно до: ${safe(details.deadline)}`,
+        "📌 ТИП САЙТУ",
+        safe(details.siteType),
         "",
-        "ДИЗАЙН",
-        `Опис: ${safe(details.design)}`,
-        `Шрифт: ${safe(details.font)}`,
-        `Пристрій: ${safe(details.device)}`,
-        "",
-        "ІДЕЯ САЙТУ",
+        "💭 ІДЕЯ САЙТУ",
         safe(details.idea),
         "",
-        `Функції: ${safe(details.features)}`,
+        "🎨 КОЛЬОРОВА ПАЛІТРА",
+        safe(details.selectedColors),
+        "",
+        "📸 ФОТОГРАФІЇ",
+        `Кількість: ${photos.length}`,
+        `Загальні пояснення: ${safe(details.photoNotes)}`,
+        "",
+        "Коментарі до окремих фото:",
+        photoDescriptions,
+        "",
+        "🎵 МУЗИКА ТА МАТЕРІАЛИ",
         `Посилання на музику: ${safe(details.musicLink)}`,
-        `Фотографії: ${safe(details.photos)}`,
-        `Відео: ${safe(details.video)}`,
-        `Аудіофайл: ${safe(details.musicFile)}`,
+        `Інші матеріали: ${safe(details.otherMaterials)}`,
+        `Відеофайл: ${
+          video instanceof File && video.size > 0
+            ? video.name
+            : "Не додано"
+        }`,
+        `Аудіофайл: ${
+          audio instanceof File && audio.size > 0
+            ? audio.name
+            : "Не додано"
+        }`,
         "",
-        `Додаткові побажання: ${safe(details.extraWishes)}`,
+        "📝 ДОДАТКОВІ ПОБАЖАННЯ",
+        safe(details.extraWishes),
+        "",
+        "📅 ДЕТАЛІ ЗАМОВЛЕННЯ",
+        `Бажаний термін: ${safe(details.deadline)}`,
         `Промокод: ${safe(details.promoCode)}`,
+        `Вартість: ${tariff}`,
         "",
-        `Контакт: ${safe(details.contact)}`,
-        `Вартість: ${safe(form.get("tariff"))}`
+        "👤 КОНТАКТИ",
+        `Ім'я: ${safe(details.recipientName)}`,
+        `Контакт: ${safe(details.contact)}`
       ].join("\n");
 
       const sendTelegram = async (method, body) => {
@@ -120,53 +165,111 @@ export default {
         return result;
       };
 
-      await sendTelegram(
-        "sendMessage",
-        (() => {
-          const body = new FormData();
-          body.append("chat_id", env.CHAT_ID);
-          body.append("text", message);
-          return body;
-        })()
-      );
+      // Розбиваємо довгі повідомлення на частини
+      const splitMessage = (text, maxLength = 3800) => {
+        const chunks = [];
+        let current = "";
 
-      const photos = form.getAll("photos");
-      const video = form.get("videoFile");
-      const audio = form.get("musicFile");
+        for (const line of text.split("\n")) {
+          if (line.length > maxLength) {
+            if (current) {
+              chunks.push(current);
+              current = "";
+            }
+
+            for (let i = 0; i < line.length; i += maxLength) {
+              chunks.push(line.slice(i, i + maxLength));
+            }
+
+            continue;
+          }
+
+          if ((current + "\n" + line).length > maxLength) {
+            chunks.push(current);
+            current = line;
+          } else {
+            current += (current ? "\n" : "") + line;
+          }
+        }
+
+        if (current) chunks.push(current);
+
+        return chunks;
+      };
+
+      // Надсилаємо текст заявки
+      for (const part of splitMessage(message)) {
+        const body = new FormData();
+        body.append("chat_id", env.CHAT_ID);
+        body.append("text", part);
+
+        await sendTelegram("sendMessage", body);
+      }
+
       const warnings = [];
 
-      for (const photo of photos) {
-        if (!(photo instanceof File) || photo.size === 0) continue;
+      // Надсилаємо всі фотографії з їхніми коментарями
+      for (let i = 0; i < photos.length; i++) {
+        const photo = photos[i];
+
+        const photoInfo = photoComments.find(
+          item => item.filename === photo.name
+        );
+
+        const comment = photoInfo?.comment
+          ? String(photoInfo.comment)
+          : "Коментар не додано";
+
+        const caption = (
+          `📸 Фото ${i + 1}: ${photo.name}\n` +
+          `Коментар: ${comment}`
+        ).slice(0, 1000);
 
         try {
           const body = new FormData();
           body.append("chat_id", env.CHAT_ID);
-          body.append("photo", photo, photo.name);
-          body.append("caption", `Фото до замовлення Kvisite: ${photo.name}`);
-          await sendTelegram("sendPhoto", body);
+
+          // Для великих зображень використовуємо документ
+          if (photo.size > 10 * 1024 * 1024) {
+            body.append("document", photo, photo.name);
+            body.append("caption", caption);
+
+            await sendTelegram("sendDocument", body);
+          } else {
+            body.append("photo", photo, photo.name);
+            body.append("caption", caption);
+
+            await sendTelegram("sendPhoto", body);
+          }
         } catch (error) {
-          warnings.push(`Фото ${photo.name}: ${error.message}`);
+          warnings.push(
+            `Фото ${photo.name}: ${error.message}`
+          );
         }
       }
 
+      // Надсилаємо відео
       if (video instanceof File && video.size > 0) {
         try {
           const body = new FormData();
           body.append("chat_id", env.CHAT_ID);
           body.append("video", video, video.name);
-          body.append("caption", `Відео до замовлення Kvisite: ${video.name}`);
+          body.append("caption", `🎬 Відео: ${video.name}`);
+
           await sendTelegram("sendVideo", body);
         } catch (error) {
           warnings.push(`Відео: ${error.message}`);
         }
       }
 
+      // Надсилаємо аудіо
       if (audio instanceof File && audio.size > 0) {
         try {
           const body = new FormData();
           body.append("chat_id", env.CHAT_ID);
           body.append("audio", audio, audio.name);
-          body.append("caption", `Музика до замовлення Kvisite: ${audio.name}`);
+          body.append("caption", `🎵 Музика: ${audio.name}`);
+
           await sendTelegram("sendAudio", body);
         } catch (error) {
           warnings.push(`Аудіо: ${error.message}`);
@@ -178,6 +281,7 @@ export default {
         message: "Заявку надіслано",
         warnings
       });
+
     } catch (error) {
       return json({
         ok: false,
@@ -186,3 +290,4 @@ export default {
     }
   }
 };
+
