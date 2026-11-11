@@ -3,487 +3,494 @@
 <html lang="uk">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#fff7f8">
-  <title>Оформлення замовлення — Kvisite</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Анкета замовлення — KVISITE</title>
   <link rel="stylesheet" href="style.css">
+  <style>
+    .type-options, .palette {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .type-option, .color-choice {
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      background: #fffdfc;
+      padding: 13px;
+      cursor: pointer;
+      color: var(--brown);
+    }
+    .type-option:has(input:checked) {
+      border-color: var(--pink-dark);
+      background: #fff5f7;
+    }
+    .type-option input { accent-color: var(--pink-dark); }
+    .palette { grid-template-columns: repeat(5, 1fr); }
+    .color-choice {
+      aspect-ratio: 1;
+      padding: 4px;
+      border: 2px solid transparent;
+    }
+    .color-choice.selected { border-color: var(--pink-dark); }
+    .color-choice span {
+      display: block;
+      width: 100%;
+      height: 100%;
+      border-radius: 6px;
+    }
+    .photo-item {
+      display: grid;
+      grid-template-columns: 68px 1fr auto;
+      gap: 10px;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .photo-item img {
+      width: 68px;
+      height: 68px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+    .photo-item input { min-width: 0; }
+    .remove-photo {
+      border: 0;
+      background: transparent;
+      color: var(--pink-dark);
+      font-size: 20px;
+    }
+    .upload-button {
+      display: block;
+      padding: 16px;
+      border: 1px dashed #d9b8c4;
+      border-radius: 9px;
+      text-align: center;
+      color: var(--pink-dark);
+      background: #fff9fa;
+      cursor: pointer;
+    }
+    .upload-button input { display: none; }
+    .hint {
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .palette-count { color: var(--muted); font-size: 12px; }
+    @media(max-width:420px) {
+      .photo-item { grid-template-columns: 55px 1fr auto; }
+      .photo-item img { width: 55px; height: 55px; }
+    }
+  </style>
 </head>
+
 <body class="order-page">
-  <main class="order-wrap">
-    <a class="back-link" href="index.html">← На головну</a>
+<main class="order-wrap">
 
-    <header class="order-header">
-      <div class="mini-wordmark">K V I S I T E</div>
-      <h1>Оформлення замовлення</h1>
-      <p>
-        Розкажіть про свою ідею, дизайн і побажання.
-        Я перегляну заявку та зв’яжуся з вами, щоб обговорити деталі.
-      </p>
-    </header>
+  <a class="back-link" href="index.html">← На головну</a>
 
-    <form id="orderForm" enctype="multipart/form-data">
-      <section class="form-card">
-        <div class="card-heading">
-          <span class="card-flower">♡</span>
-          <div>
-            <h2>Про замовлення</h2>
-            <p>Кому присвячений сайт і коли він потрібен</p>
-          </div>
+  <header class="order-header">
+    <div class="mini-wordmark">K V I S I T E</div>
+    <p class="eyebrow">YOUR IDEA · OUR DESIGN</p>
+    <h1>Створімо ваш сайт ♡</h1>
+    <p>Розкажіть про свою задумку, додайте приклади та матеріали. Чим більше деталей — тим краще ми зрозуміємо, що ви хочете отримати.</p>
+  </header>
+
+  <form id="orderForm">
+
+    <section class="form-card">
+      <div class="card-heading">
+        <div class="card-flower">♡</div>
+        <div>
+          <h2>01. Який сайт вам потрібен?</h2>
+          <p>Оберіть тип майбутнього сайту.</p>
         </div>
+      </div>
 
-        <label class="field">
-          <span>Для кого створюємо сайт?</span>
-          <input name="forWhom" required maxlength="150"
-                 placeholder="Наприклад: для мами, подруги, сестри">
-        </label>
-
-        <label class="field">
-          <span>Ім’я цієї людини</span>
-          <input name="recipientName" required maxlength="100"
-                 placeholder="Наприклад: Катерина">
-          <small>Напишіть ім’я людини, для якої створюємо сайт</small>
-        </label>
-
-        <label class="field">
-          <span>Як звертатися до неї?</span>
-          <input name="nameForms" required maxlength="250"
-                 placeholder="Катерина, Катя, Катрусю, Катруся">
-          <small>Напишіть 3–4 форми імені, як звертатися до неї</small>
-        </label>
-
-        <label class="field">
-          <span>Привід для сайту</span>
-          <input name="occasion" maxlength="200"
-                 placeholder="Наприклад: день народження">
-        </label>
-
-        <label class="field">
-          <span>На коли потрібен сайт?</span>
-          <input name="deadline" type="date" id="deadline">
-          <small>Якщо точної дати ще немає, поле можна залишити порожнім</small>
-        </label>
-      </section>
-
-      <section class="form-card">
-        <div class="card-heading">
-          <span class="card-flower">♡</span>
-          <div>
-            <h2>Дизайн</h2>
-            <p>Стиль, кольори та настрій сайту</p>
-          </div>
+      <fieldset class="field">
+        <div class="type-options">
+          <label class="type-option">
+            <input type="radio" name="siteType" value="Сайт-привітання" checked>
+            <strong>♡ Сайт-привітання</strong>
+            <small>100 грн</small>
+          </label>
+          <label class="type-option">
+            <input type="radio" name="siteType" value="Особистий сайт">
+            <strong>Особистий сайт</strong>
+            <small>150 грн</small>
+          </label>
         </div>
+        <p class="hint">Інтернет-магазини поки не приймаємо в роботу.</p>
+      </fieldset>
+    </section>
 
-        <label class="field">
-          <span>Яким ви уявляєте свій сайт?</span>
-          <textarea name="design" required rows="5" maxlength="4000"
-                    placeholder="Стиль, кольори, дизайн та все, що ви уявляєте"></textarea>
-          <small>
-            Можна описати настрій, декор, улюблені кольори,
-            приклади та будь-які деталі, які вам подобаються
-          </small>
+    <section class="form-card">
+      <div class="card-heading">
+        <div class="card-flower">02</div>
+        <div>
+          <h2>Ваша задумка</h2>
+          <p>Головна частина анкети — опишіть усе, що уявляєте.</p>
+        </div>
+      </div>
+
+      <label class="field">
+        <span>Яким ви бачите свій сайт?</span>
+        <textarea name="idea" rows="9"
+          placeholder="Наприклад: хочу ніжний рожевий сайт із бантиками. На першому екрані має бути привітання, нижче — фотографії, музика та кнопка з листом..."></textarea>
+        <small>Можете описати стиль, розділи, написи, кнопки, анімації та будь-які дрібниці. Обсяг тексту не обмежуємо.</small>
+      </label>
+    </section>
+
+    <section class="form-card">
+      <div class="card-heading">
+        <div class="card-flower">03</div>
+        <div>
+          <h2>Кольори сайту</h2>
+          <p>Оберіть усі кольори, які вам подобаються.</p>
+        </div>
+      </div>
+
+      <div class="palette" id="palette"></div>
+      <p class="palette-count" id="paletteCount">Обрано: 0 кольорів</p>
+    </section>
+
+    <section class="form-card">
+      <div class="card-heading">
+        <div class="card-flower">04</div>
+        <div>
+          <h2>Фотографії та приклади</h2>
+          <p>Додавайте зображення, які допоможуть нам зрозуміти вашу ідею.</p>
+        </div>
+      </div>
+
+      <div class="upload-block">
+        <label class="upload-button">
+          <strong>＋ Додати фотографії</strong>
+          <br>
+          <small>Можна вибрати декілька файлів одразу</small>
+          <input id="photosInput" type="file" accept="image/*" multiple>
         </label>
 
-        <fieldset class="field">
-          <legend>Оберіть шрифт, якщо маєте побажання</legend>
-          <div class="font-grid">
-            <label class="font-option">
-              <input type="radio" name="font" value="Елегантний">
-              <span class="font-sample elegant">Aa</span>
-              <span>Елегантний</span>
-            </label>
+        <div id="photoList"></div>
+        <p class="file-info" id="photoInfo">Поки немає доданих фотографій.</p>
+      </div>
 
-            <label class="font-option">
-              <input type="radio" name="font" value="М’який округлий">
-              <span class="font-sample rounded-font">Aa</span>
-              <span>Округлий</span>
-            </label>
+      <label class="field" style="margin-top:20px">
+        <span>Загальні пояснення до фотографій</span>
+        <textarea name="photoNotes" rows="4"
+          placeholder="Наприклад: перші три фото — приклади оформлення, а персонажа з останнього хочу додати на головний екран."></textarea>
+        <small>Не обов'язково пояснювати кожне фото окремо.</small>
+      </label>
+    </section>
 
-            <label class="font-option">
-              <input type="radio" name="font" value="Мінімалістичний">
-              <span class="font-sample minimal-font">Aa</span>
-              <span>Мінімалістичний</span>
-            </label>
+    <section class="form-card">
+      <div class="card-heading">
+        <div class="card-flower">05</div>
+        <div>
+          <h2>Додаткові матеріали</h2>
+          <p>Музика, відео, посилання та інші файли.</p>
+        </div>
+      </div>
 
-            <label class="font-option">
-              <input type="radio" name="font" value="Милий">
-              <span class="font-sample cute-font">♡ Aa</span>
-              <span>Милий</span>
-            </label>
+      <label class="field">
+        <span>Музика</span>
+        <input type="file" name="musicFile" accept="audio/*">
+        <small>Або вставте посилання на музику в поле нижче.</small>
+      </label>
 
-            <label class="font-option">
-              <input type="radio" name="font" value="Класичний">
-              <span class="font-sample classic-font">Aa</span>
-              <span>Класичний</span>
-            </label>
+      <label class="field">
+        <span>Посилання на музику (якщо є)</span>
+        <input type="url" name="musicLink" placeholder="https://...">
+      </label>
 
-            <label class="font-option">
-              <input type="radio" name="font" value="На ваш розсуд" checked>
-              <span class="font-sample">Aa</span>
-              <span>На ваш розсуд</span>
-            </label>
-          </div>
-        </fieldset>
+      <label class="field">
+        <span>Відео</span>
+        <input type="file" name="videoFile" accept="video/*">
+      </label>
 
-<div class="field">
-  <span class="field-title">На якому пристрої переглядатимуть сайт?</span>
-  <div class="choice-row">
-    <label class="choice">
-      <input type="checkbox" name="devices" value="Телефон">
-      <span>📱 Телефон</span>
-    </label>
-    <label class="choice">
-      <input type="checkbox" name="devices" value="Комп’ютер / планшет">
-      <span>💻 Комп’ютер / планшет</span>
-    </label>
-  </div>
+      <label class="field">
+        <span>Інші посилання або матеріали</span>
+        <textarea name="otherMaterials" rows="3"
+          placeholder="Вставте посилання або поясніть, які ще матеріали маєте."></textarea>
+      </label>
+    </section>
+
+    <section class="form-card">
+      <div class="card-heading">
+        <div class="card-flower">06</div>
+        <div>
+          <h2>Додаткові побажання</h2>
+          <p>Усе, що ще важливо врахувати.</p>
+        </div>
+      </div>
+
+      <label class="field">
+        <span>Ваші побажання</span>
+        <textarea name="extraWishes" rows="4"
+          placeholder="Можливо, є ще якісь деталі, про які ми не запитали?"></textarea>
+      </label>
+
+      <label class="field">
+        <span>Бажаний термін виконання</span>
+        <input type="date" name="deadline" id="deadline">
+      </label>
+    </section>
+
+    <section class="form-card">
+      <div class="card-heading">
+        <div class="card-flower">07</div>
+        <div>
+          <h2>Контактні дані</h2>
+          <p>Як ми зможемо з вами зв'язатися?</p>
+        </div>
+      </div>
+
+      <label class="field">
+        <span>Ваше ім'я</span>
+        <input type="text" name="recipientName" required placeholder="Як до вас звертатися?">
+      </label>
+
+      <label class="field">
+        <span>Telegram або Instagram</span>
+        <input type="text" name="contact" required placeholder="@username або посилання">
+      </label>
+    </section>
+
+    <section class="form-card">
+      <div class="price-note">
+        <span>Вартість обраного сайту</span>
+        <strong id="price">100 грн</strong>
+        <p>Остаточні деталі замовлення узгодимо під час спілкування.</p>
+      </div>
+
+      <button class="button button-primary submit-button" id="submitButton" type="submit">
+        Надіслати анкету ♡
+      </button>
+      <p class="submit-note">Перевірте свої відповіді перед відправленням.</p>
+      <p class="form-status" id="formStatus" role="status"></p>
+    </section>
+
+  </form>
+</main>
+
+<div class="success-toast" id="successToast" hidden>
+  <div class="success-mark">♡</div>
+  <h2>Дякуємо за замовлення!</h2>
+  <p>Анкету надіслано. Ми зв'яжемося з вами для обговорення деталей.</p>
+  <a class="button button-primary" href="index.html">На головну</a>
 </div>
 
-<label class="field">
-  Яка операційна система на телефоні?
-  <select name="operatingSystem" required>
-    <option value="" disabled selected>Обери варіант</option>
-    <option value="Android">Android</option>
-    <option value="iPhone (iOS)">iPhone (iOS)</option>
-  </select>
-</label>
-      <section class="form-card">
-        <div class="card-heading">
-          <span class="card-flower">♡</span>
-          <div>
-            <h2>Ідея сайту</h2>
-            <p>Що ви хочете побачити на готовому сайті</p>
-          </div>
-        </div>
+<script>
+const WORKER_URL = "https://kvisite-api.k2503212.workers.dev/";
+const MAX_TOTAL_SIZE = 70 * 1024 * 1024;
 
-        <label class="field">
-          <span>Що має бути на сайті?</span>
-          <textarea name="idea" required rows="6" maxlength="5000"
-                    placeholder="Розкажіть про тексти, привітання, кнопки, сюрпризи та будь-які ідеї"></textarea>
-          <small>
-            Не потрібно самостійно розподіляти ідеї по сторінках.
-            Просто опишіть усе, що уявляєте
-          </small>
-        </label>
+const form = document.getElementById("orderForm");
+const photosInput = document.getElementById("photosInput");
+const photoList = document.getElementById("photoList");
+const photoInfo = document.getElementById("photoInfo");
+const formStatus = document.getElementById("formStatus");
+const submitButton = document.getElementById("submitButton");
 
-        <label class="field">
-          <span>Додаткові побажання</span>
-          <textarea name="extraWishes" rows="3" maxlength="3000"
-                    placeholder="Усе, що ще важливо знати"></textarea>
-        </label>
-      </section>
+let photos = [];
+let selectedColors = [];
 
-      <section class="form-card">
-        <div class="card-heading">
-          <span class="card-flower">♡</span>
-          <div>
-            <h2>Матеріали та функції</h2>
-            <p>Додайте файли та оберіть потрібні можливості</p>
-          </div>
-        </div>
+const colors = [
+  "#f5c6d5","#e7a9bd","#d985a4","#bd7890","#9b536f",
+  "#fff0df","#f3dfc8","#d9b99b","#b88e78","#80675b",
+  "#fff9e9","#f4e9b9","#e5d28a","#c8b66d","#a39152",
+  "#e3d9f4","#c9b8e8","#a995d1","#8574ae","#65547f",
+  "#d8ebdf","#b6d5c2","#8fb69f","#67917b","#466c59",
+  "#dcecf5","#a9cde0","#78a9c6","#5686a7","#355e7c"
+];
 
-        <fieldset class="field">
-          <legend>Додаткові функції</legend>
-          <div class="feature-grid">
-            <label class="feature-option">
-              <input type="checkbox" name="features" value="Фото">
-              <span>♡</span> Фото
-            </label>
-            <label class="feature-option">
-              <input type="checkbox" name="features" value="Музика" id="musicFeature">
-              <span>♫</span> Музика
-            </label>
-            <label class="feature-option">
-              <input type="checkbox" name="features" value="Анімації">
-              <span>✧</span> Анімації
-            </label>
-            <label class="feature-option">
-              <input type="checkbox" name="features" value="Лист або привітання">
-              <span>♡</span> Лист або привітання
-            </label>
-            <label class="feature-option">
-              <input type="checkbox" name="features" value="Галерея спогадів">
-              <span>▧</span> Галерея спогадів
-            </label>
-            <label class="feature-option">
-              <input type="checkbox" name="features" value="Відео">
-              <span>▷</span> Відео
-            </label>
-          </div>
-        </fieldset>
+const palette = document.getElementById("palette");
 
-        <div class="upload-block">
-          <label class="field">
-            <span>Фотографії</span>
-            <input type="file" name="photos" id="photos"
-                   accept="image/*" multiple>
-            <small>Можна завантажити до 10 фотографій</small>
-          </label>
-          <div id="photoPreview" class="photo-preview"></div>
-        </div>
+colors.forEach(color => {
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className = "color-choice";
+  button.setAttribute("aria-label", color);
+  button.innerHTML = `<span style="background:${color}"></span>`;
 
-        <div class="upload-block">
-          <label class="field">
-            <span>Відео</span>
-            <input type="file" name="videoFile" id="videoFile"
-                   accept="video/*">
-            <small>Необов’язково · лише один відеофайл</small>
-          </label>
-          <p id="videoInfo" class="file-info"></p>
-        </div>
+  button.addEventListener("click", () => {
+    if (selectedColors.includes(color)) {
+      selectedColors = selectedColors.filter(c => c !== color);
+      button.classList.remove("selected");
+    } else {
+      selectedColors.push(color);
+      button.classList.add("selected");
+    }
 
-        <div class="conditional-block" id="musicFields" hidden>
-          <p class="conditional-title">Музика ♡</p>
-          <label class="field">
-            <span>Посилання на музику</span>
-            <input name="musicLink" type="url" placeholder="https://…">
-          </label>
-          <label class="field">
-            <span>Або завантажте аудіофайл</span>
-            <input type="file" name="musicFile" id="musicFile" accept="audio/*">
-          </label>
-          <p id="musicInfo" class="file-info"></p>
-        </div>
-      </section>
+    document.getElementById("paletteCount").textContent =
+      `Обрано: ${selectedColors.length} кольорів`;
+  });
 
-      <section class="form-card">
-        <div class="card-heading">
-          <span class="card-flower">♡</span>
-          <div>
-            <h2>Зворотний зв’язок</h2>
-            <p>Залиште контакт для обговорення замовлення</p>
-          </div>
-        </div>
+  palette.appendChild(button);
+});
 
-        <label class="field">
-          <span>Промокод</span>
-          <input name="promoCode" maxlength="50"
-                 placeholder="Введіть промокод">
-          <small>
-            Шукайте в ТікТоці або можу дати за часті замовлення, або з особливого приводу
-          </small>
-        </label>
+document.querySelectorAll('input[name="siteType"]').forEach(input => {
+  input.addEventListener("change", () => {
+    document.getElementById("price").textContent =
+      input.value === "Сайт-привітання" ? "100 грн" : "150 грн";
+  });
+});
 
-        <label class="field">
-          <span>Як з вами зв’язатися?</span>
-          <input name="contact" required maxlength="200"
-                 placeholder="Юзернейм у Telegram або номер телефону">
-          <small>Перевірте, будь ласка, чи правильно вказаний контакт</small>
-        </label>
+function totalFileSize() {
+  const music = form.elements.musicFile.files[0];
+  const video = form.elements.videoFile.files[0];
 
-        <div class="price-note">
-          <span>Вартість сайту</span>
-          <strong>150 грн</strong>
-          <p>
-            Перед оплатою я перегляну ідею та зв’яжуся з вами,
-            щоб обговорити деталі. Якщо задум складніший,
-            домовимося про можливості й вартість заздалегідь.
-          </p>
-        </div>
+  return photos.reduce((sum, item) => sum + item.file.size, 0)
+    + (music ? music.size : 0)
+    + (video ? video.size : 0);
+}
 
-        <p id="formStatus" class="form-status" role="status" aria-live="polite"></p>
+function renderPhotos() {
+  photoList.innerHTML = "";
 
-        <button class="button button-primary submit-button" id="submitOrder" type="submit">
-          Відправити заявку <span aria-hidden="true">↗</span>
-        </button>
+  photos.forEach((item, index) => {
+    const row = document.createElement("div");
+    row.className = "photo-item";
 
-        <p class="submit-note">
-          Після відправлення заявки я зв’яжуся з вами для обговорення деталей
-        </p>
-      </section>
-    </form>
+    const image = document.createElement("img");
+    image.src = item.preview;
+    image.alt = "Попередній перегляд фотографії";
 
-    <footer class="site-footer">
-      <span>K V I S I T E</span>
-      <p>Створено з увагою до деталей ♡</p>
-    </footer>
-  </main>
+    const details = document.createElement("div");
 
-  <div class="success-toast" id="successToast" role="status" aria-live="polite" hidden>
-    <div class="success-mark">♡</div>
-    <h2>Замовлення надіслано!</h2>
-    <p>
-      Дякуємо! Я перегляну ідею та зв’яжуся з тобою,
-      щоб обговорити деталі й оплату.
-    </p>
-    <a class="button button-primary" href="index.html">На головну</a>
-  </div>
+    const filename = document.createElement("small");
+    filename.textContent = item.file.name;
+    filename.style.display = "block";
 
-  <script>
-    (() => {
-      const WORKER_URL = 'https://kvisite-api.k2503212.workers.dev/';
-      const form = document.getElementById('orderForm');
-      const status = document.getElementById('formStatus');
-      const submitButton = document.getElementById('submitOrder');
-      const photosInput = document.getElementById('photos');
-      const photoPreview = document.getElementById('photoPreview');
-      const videoInput = document.getElementById('videoFile');
-      const musicInput = document.getElementById('musicFile');
-      const musicFeature = document.getElementById('musicFeature');
-      const musicFields = document.getElementById('musicFields');
-      const toast = document.getElementById('successToast');
-      const deadline = document.getElementById('deadline');
+    const comment = document.createElement("input");
+    comment.type = "text";
+    comment.placeholder = "Коментар до фото (необов'язково)";
+    comment.value = item.comment;
+    comment.addEventListener("input", () => {
+      item.comment = comment.value;
+    });
 
-      deadline.min = new Date().toLocaleDateString('en-CA');
+    details.append(filename, comment);
 
-      function formatSize(bytes) {
-        return bytes < 1024 * 1024
-          ? Math.ceil(bytes / 1024) + ' КБ'
-          : (bytes / (1024 * 1024)).toFixed(1) + ' МБ';
-      }
+    const remove = document.createElement("button");
+    remove.type = "button";
+    remove.className = "remove-photo";
+    remove.textContent = "×";
+    remove.setAttribute("aria-label", "Видалити фотографію");
 
-      function currentFiles() {
-        return [
-          ...photosInput.files,
-          ...(videoInput.files || []),
-          ...(musicInput.files || [])
-        ];
-      }
+    remove.addEventListener("click", () => {
+      URL.revokeObjectURL(item.preview);
+      photos.splice(index, 1);
+      renderPhotos();
+    });
 
-      function checkTotalSize(files) {
-        const total = files.reduce((sum, file) => sum + file.size, 0);
-        if (total > 70 * 1024 * 1024) {
-          status.textContent =
-            'Загальний розмір усіх файлів має бути не більше 70 МБ. Видаліть або зменште деякі файли.';
-          return false;
-        }
-        status.textContent = '';
-        return true;
-      }
+    row.append(image, details, remove);
+    photoList.appendChild(row);
+  });
 
-      function renderPhotos() {
-        photoPreview.innerHTML = '';
-        [...photosInput.files].forEach((file, index) => {
-          const card = document.createElement('div');
-          card.className = 'photo-thumb';
+  photoInfo.textContent = photos.length
+    ? `Додано фотографій: ${photos.length}. Загальний розмір файлів: ${(totalFileSize() / 1024 / 1024).toFixed(1)} МБ.`
+    : "Поки немає доданих фотографій.";
+}
 
-          const image = document.createElement('img');
-          image.alt = file.name;
-          image.src = URL.createObjectURL(file);
+photosInput.addEventListener("change", () => {
+  const newFiles = Array.from(photosInput.files);
 
-          const name = document.createElement('span');
-          name.textContent = file.name;
+  for (const file of newFiles) {
+    if (!file.type.startsWith("image/")) continue;
 
-          const remove = document.createElement('button');
-          remove.type = 'button';
-          remove.textContent = '×';
-          remove.setAttribute('aria-label', 'Видалити фото ' + file.name);
-          remove.addEventListener('click', () => {
-            const transfer = new DataTransfer();
-            [...photosInput.files].forEach((item, i) => {
-              if (i !== index) transfer.items.add(item);
-            });
-            photosInput.files = transfer.files;
-            renderPhotos();
-            checkTotalSize(currentFiles());
-          });
+    if (totalFileSize() + file.size > MAX_TOTAL_SIZE) {
+      alert("Загальний розмір файлів не може перевищувати 70 МБ.");
+      break;
+    }
 
-          card.append(image, remove, name);
-          photoPreview.append(card);
-        });
-      }
+    photos.push({
+      file,
+      comment: "",
+      preview: URL.createObjectURL(file)
+    });
+  }
 
-      photosInput.addEventListener('change', () => {
-        if (photosInput.files.length > 10) {
-          alert('Можна додати не більше 10 фотографій.');
-          photosInput.value = '';
-        }
-        renderPhotos();
-        checkTotalSize(currentFiles());
-      });
+  photosInput.value = "";
+  renderPhotos();
+});
 
-      videoInput.addEventListener('change', () => {
-        const file = videoInput.files[0];
-        document.getElementById('videoInfo').textContent =
-          file ? `${file.name} · ${formatSize(file.size)}` : '';
-        checkTotalSize(currentFiles());
-      });
+form.addEventListener("submit", async event => {
+  event.preventDefault();
+  formStatus.textContent = "";
 
-      musicInput.addEventListener('change', () => {
-        const file = musicInput.files[0];
-        document.getElementById('musicInfo').textContent =
-          file ? `${file.name} · ${formatSize(file.size)}` : '';
-        checkTotalSize(currentFiles());
-      });
+  if (totalFileSize() > MAX_TOTAL_SIZE) {
+    formStatus.textContent = "Загальний розмір файлів перевищує 70 МБ.";
+    return;
+  }
 
-      musicFeature.addEventListener('change', () => {
-        musicFields.hidden = !musicFeature.checked;
-        if (!musicFeature.checked) {
-          form.elements.musicLink.value = '';
-          musicInput.value = '';
-          document.getElementById('musicInfo').textContent = '';
-        }
-      });
+  submitButton.disabled = true;
+  submitButton.textContent = "Надсилаємо...";
 
-      form.addEventListener('submit', async event => {
-        event.preventDefault();
-        status.textContent = '';
+  const data = new FormData();
 
-        if (!form.reportValidity()) return;
-        if (!checkTotalSize(currentFiles())) return;
+  const siteType = form.elements.siteType.value;
+  const tariff = siteType === "Сайт-привітання" ? "100 грн" : "150 грн";
 
-        const data = new FormData(form);
-       const details = {
-  forWhom: data.get('forWhom'),
-  recipientName: data.get('recipientName'),
-  nameForms: data.get('nameForms'),
-  occasion: data.get('occasion'),
-  deadline: data.get('deadline'),
-  design: data.get('design'),
-  font: data.get('font'),
-  devices: data.getAll('devices'),
-  operatingSystem: data.get('operatingSystem'),
-  idea: data.get('idea'),
-  extraWishes: data.get('extraWishes'),
-  promoCode: data.get('promoCode'),
-  features: data.getAll('features'),
-  musicLink: data.get('musicLink'),
-  contact: data.get('contact'),
-  photos: [...photosInput.files].map(file => file.name),
-  video: videoInput.files[0]?.name || '',
-  musicFile: musicInput.files[0]?.name || ''
-};
+  const details = {
+    forWhom: "",
+    recipientName: form.elements.recipientName.value,
+    nameForms: "",
+    occasion: "",
+    deadline: form.elements.deadline.value,
+    design: "",
+    font: "",
+    devices: [],
+    operatingSystem: "",
+    idea: form.elements.idea.value,
+    extraWishes: form.elements.extraWishes.value,
+    promoCode: "",
+    features: [],
+    musicLink: form.elements.musicLink.value,
+    contact: form.elements.contact.value,
+    siteType,
+    selectedColors,
+    photoNotes: form.elements.photoNotes.value,
+    photoComments: photos.map(item => ({
+      filename: item.file.name,
+      comment: item.comment
+    })),
+    otherMaterials: form.elements.otherMaterials.value
+  };
 
-        data.append('orderDetails', JSON.stringify(details));
-        data.append('tariff', '150 грн');
+  data.append("orderDetails", JSON.stringify(details));
+  data.append("tariff", tariff);
 
-        submitButton.disabled = true;
-        submitButton.textContent = 'Надсилаємо заявку…';
+  photos.forEach(item => {
+    data.append("photos", item.file, item.file.name);
+  });
 
-        try {
-          const response = await fetch(WORKER_URL, {
-            method: 'POST',
-            body: data
-          });
+  const music = form.elements.musicFile.files[0];
+  const video = form.elements.videoFile.files[0];
 
-          let result = {};
-          try {
-            result = await response.json();
-          } catch (_) {}
+  if (music) data.append("musicFile", music);
+  if (video) data.append("videoFile", video);
 
-          if (!response.ok || !result.ok) {
-            throw new Error(result.error || 'Не вдалося відправити заявку');
-          }
+  try {
+    const response = await fetch(WORKER_URL, {
+      method: "POST",
+      body: data
+    });
 
-          form.reset();
-          photoPreview.innerHTML = '';
-          document.getElementById('videoInfo').textContent = '';
-          document.getElementById('musicInfo').textContent = '';
-          musicFields.hidden = true;
-          form.hidden = true;
-          document.querySelector('.order-header').hidden = true;
-          document.querySelector('.back-link').hidden = true;
-          toast.hidden = false;
-          window.scrollTo({ top: 0, behavior: 'smooth' });
+    const result = await response.json();
 
-        } catch (error) {
-          status.textContent =
-            'Не вдалося відправити заявку. Перевір інтернет і спробуй ще раз. Твої поля поки залишаються заповненими.';
-        } finally {
-          submitButton.disabled = false;
-          submitButton.innerHTML = 'Відправити заявку <span aria-hidden="true">↗</span>';
-        }
-      });
-    })();
-  </script>
+    if (!response.ok || !result.ok) {
+      throw new Error(result.error || "Не вдалося надіслати анкету.");
+    }
+
+    document.getElementById("successToast").hidden = false;
+    window.scrollTo({ top: 0, behavior: "smooth" });
+
+  } catch (error) {
+    formStatus.textContent =
+      error.message || "Помилка відправлення. Спробуйте ще раз.";
+  } finally {
+    submitButton.disabled = false;
+    submitButton.textContent = "Надіслати анкету ♡";
+  }
+});
+</script>
 </body>
 </html>
